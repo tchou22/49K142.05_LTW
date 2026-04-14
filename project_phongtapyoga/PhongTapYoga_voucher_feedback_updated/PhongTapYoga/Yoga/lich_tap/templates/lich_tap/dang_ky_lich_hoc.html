@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dangkylichtap.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Đăng ký lịch học</h2>
+</div>
+
+<div class="card" style="padding: 24px; border-radius: 12px; background: #fff; margin-bottom: 24px;">
+    <h3 style="margin-bottom: 10px;">Thông tin hội viên</h3>
+    <p><strong>Họ tên:</strong> {{ hoi_vien.ho_ten }}</p>
+    <p><strong>Số điện thoại:</strong> {{ hoi_vien.so_dien_thoai }}</p>
+    <p><strong>Gói tập:</strong> {{ goi_tap }}</p>
+</div>
+
+<div class="card" style="padding: 24px; border-radius: 12px; background: #fff; margin-bottom: 24px;">
+    <h3 style="margin-bottom: 16px;">Chọn lịch học</h3>
+
+    <form method="post" id="dangKyLichHocNhanVienForm" data-existing-count="{{ so_luong_da_dang_ky|default:0 }}">
+        {% csrf_token %}
+
+        {% if form.lich_hocs.field.queryset %}
+            <div class="checkbox-list">
+                {% for lich in form.lich_hocs.field.queryset %}
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                            {% for item in ds_da_dang_ky %}
+                                {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                            {% endfor %}>
+                        {{ lich.ma_lich }} - {{ lich.goi_tap.ten_goi }} - {{ lich.get_thu_display }} ({{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }})
+                    </label>
+                {% endfor %}
+            </div>
+
+            <p style="margin: 12px 0 0; color: #b06000; font-size: 13px;">Mỗi hội viên chỉ được đăng ký tối đa 3 buổi/tuần. Các lịch đã đăng ký sẽ được khóa để không chọn trùng.</p>
+
+            <div class="form-action-row">
+                <a href="javascript:history.back()" class="btn btn-secondary-action">Quay lại</a>
+                <button type="submit" class="btn btn-primary-action">Lưu đăng ký</button>
+            </div>
+        {% else %}
+            <p>Hiện chưa có lịch học nào thuộc gói tập này.</p>
+            <div class="form-action-row">
+                <a href="javascript:history.back()" class="btn btn-secondary-action">Quay lại</a>
+            </div>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card" style="padding: 24px; border-radius: 12px; background: #fff;">
+    <h3 style="margin-bottom: 16px;">Lịch đã đăng ký</h3>
+
+    {% if ds_da_dang_ky %}
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th style="text-align: left; padding: 10px;">Mã lịch</th>
+                    <th style="text-align: left; padding: 10px;">Khóa học</th>
+                    <th style="text-align: left; padding: 10px;">HLV</th>
+                    <th style="text-align: left; padding: 10px;">Thời gian</th>
+                    <th style="text-align: left; padding: 10px;">Ngày đăng ký</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in ds_da_dang_ky %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 10px;">{{ item.lich_hoc.ma_lich }}</td>
+                    <td style="padding: 10px;">{{ item.lich_hoc.goi_tap }}</td>
+                    <td style="padding: 10px;">{{ item.lich_hoc.hlv_phu_trach }}</td>
+                    <td style="padding: 10px;">
+                        {{ item.lich_hoc.get_thu_display }} -
+                        {{ item.lich_hoc.gio_bat_dau|time:"H:i" }} đến {{ item.lich_hoc.gio_ket_thuc|time:"H:i" }}
+                    </td>
+                    <td style="padding: 10px;">{{ item.ngay_dang_ky|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Hội viên chưa đăng ký lịch nào.</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('dangKyLichHocNhanVienForm');
+    if (!form) return;
+
+    const existingCount = parseInt(form.dataset.existingCount || '0', 10);
+    const checkboxes = form.querySelectorAll('input[name="lich_hocs"]:not(:disabled)');
+
+    function selectedCount() {
+        return form.querySelectorAll('input[name="lich_hocs"]:checked:not(:disabled)').length;
+    }
+
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (selectedCount() > 3 || existingCount + selectedCount() > 3) {
+                this.checked = false;
+                alert('Hội viên chỉ được chọn tối đa 3 buổi/tuần.');
+            }
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        const selected = selectedCount();
+        if (selected === 0) {
+            e.preventDefault();
+            alert('Vui lòng chọn ít nhất 1 buổi tập để lưu.');
+            return;
+        }
+
+        if (existingCount + selected > 3) {
+            e.preventDefault();
+            alert('Hội viên đang đăng ký sẵn ' + existingCount + ' buổi. Không thể chọn quá 3 buổi/tuần.');
+        }
+    });
+});
+</script>
+{% endblock %}

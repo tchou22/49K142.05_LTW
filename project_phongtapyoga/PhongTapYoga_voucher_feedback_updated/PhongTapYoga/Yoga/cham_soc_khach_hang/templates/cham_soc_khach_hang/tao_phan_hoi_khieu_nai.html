@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Gửi góp ý / khiếu nại{% endblock %}
+
+{% block content %}
+<div style="padding: 24px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div style="background: #fff; border-radius: 16px; padding: 32px; border: 1px solid #eee;">
+            <h2 style="margin-bottom: 10px; color: #222; font-size: 28px; font-weight: 700;">
+                Gửi góp ý / khiếu nại
+            </h2>
+            <p style="margin-bottom: 24px; color: #666;">
+                Hội viên vui lòng chọn chủ đề và mô tả chi tiết để nhân viên hỗ trợ xử lý.
+            </p>
+            <form method="post">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:600;">Hội viên</label>
+                    <input type="text" value="{{ hoi_vien.ho_ten }} - {{ hoi_vien.so_dien_thoai }}" readonly>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:600;">Chủ đề</label>
+                    {{ form.chu_de }}
+                    {% if form.chu_de.errors %}
+                        <div style="color:red; margin-top:6px;">{{ form.chu_de.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div id="vanDeKhacBox" style="margin-bottom: 18px; display: none;">
+                    <label style="display:block; margin-bottom:8px; font-weight:600;">Mô tả vấn đề khác</label>
+                    {{ form.mo_ta_van_de_khac }}
+                    {% if form.mo_ta_van_de_khac.errors %}
+                        <div style="color:red; margin-top:6px;">{{ form.mo_ta_van_de_khac.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:600;">Nội dung</label>
+                    {{ form.noi_dung_khach }}
+                    {% if form.noi_dung_khach.errors %}
+                        <div style="color:red; margin-top:6px;">{{ form.noi_dung_khach.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit"
+                        style="background:#f4c430; color:#222; border:none; padding:12px 24px; border-radius:10px; font-weight:700; cursor:pointer;">
+                    Gửi nội dung
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, textarea, select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+        background: #fff;
+    }
+
+    input[readonly] {
+        background: #f9fafb;
+        color: #555;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #f4c430;
+        box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.15);
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chuDeSelect = document.getElementById('id_chu_de');
+        const vanDeKhacBox = document.getElementById('vanDeKhacBox');
+
+        function toggleVanDeKhac() {
+            if (!chuDeSelect || !vanDeKhacBox) return;
+            vanDeKhacBox.style.display = chuDeSelect.value === 'van_de_khac' ? 'block' : 'none';
+        }
+
+        toggleVanDeKhac();
+        if (chuDeSelect) {
+            chuDeSelect.addEventListener('change', toggleVanDeKhac);
+        }
+    });
+</script>
+{% endblock %}

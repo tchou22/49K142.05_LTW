@@ -1,0 +1,121 @@
+{% extends 'base_customer.html' %}
+
+
+{% block page_title %}Điểm tích lũy{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block nav_tich_diem %}active{% endblock %}
+
+{% block content %}
+<div style="padding: 28px;">
+    <h1 style="font-size: 42px; font-weight: 800; color: #111827; margin-bottom: 24px;">
+        Điểm tích lũy
+    </h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div style="margin-bottom: 16px; padding: 12px 16px; border-radius: 10px; background: #fef3c7; color: #92400e;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div style="background: #f9e7a8; border: 1px solid #e5c85b; border-radius: 18px; width: 260px; padding: 18px 26px; margin-bottom: 18px;">
+        <div style="font-size: 28px; font-weight: 800; color: #111827;">
+            {{ hoi_vien.diem_tich_luy }} <span style="font-size: 20px;">điểm</span>
+        </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-bottom: 28px;">
+        <a href="?tab=doi_diem"
+           style="padding:10px 18px; border-radius:999px; text-decoration:none; font-weight:700;
+                  background:{% if tab == 'doi_diem' %}#e5e7eb{% else %}#f3f4f6{% endif %};
+                  color:#111827;">
+            Đổi ưu đãi
+        </a>
+        <a href="?tab=lich_su"
+           style="padding:10px 18px; border-radius:999px; text-decoration:none; font-weight:700;
+                  background:{% if tab == 'lich_su' %}#e5e7eb{% else %}#f3f4f6{% endif %};
+                  color:#111827;">
+            Lịch sử tích điểm
+        </a>
+    </div>
+
+    {% if tab == 'lich_su' %}
+        <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <table style="width:100%; border-collapse:collapse;">
+                <thead style="background:#f9fafb;">
+                    <tr>
+                        <th style="padding:14px; text-align:left;">Ngày</th>
+                        <th style="padding:14px; text-align:left;">Hoạt động</th>
+                        <th style="padding:14px; text-align:left;">Số điểm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in lich_su_diem %}
+                    <tr style="border-top:1px solid #eee;">
+                        <td style="padding:14px;">{{ item.ngay_thuc_hien|date:"d/m/Y H:i" }}</td>
+                        <td style="padding:14px;">{{ item.noi_dung }}</td>
+                        <td style="padding:14px; font-weight:700;">
+                            {% if item.loai_giao_dich == 'cong' %}
+                                <span style="color:#16a34a;">+{{ item.so_diem }}</span>
+                            {% else %}
+                                <span style="color:#dc2626;">-{{ item.so_diem }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="padding:18px; text-align:center; color:#6b7280;">
+                            Chưa có lịch sử tích điểm.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+            {% for item in ds_phan_thuong %}
+            <div style="background:#fff; border-radius:18px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.08);">
+                <div style="height:180px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-weight:700;">
+                    Ảnh ưu đãi
+                </div>
+
+                <div style="padding:18px;">
+                    <h3 style="font-size:26px; font-weight:800; color:#111827; margin-bottom:8px;">
+                        {{ item.ten_qua }}
+                    </h3>
+
+                    <p style="font-size:15px; color:#6b7280; min-height:42px; margin-bottom:12px;">
+                        Đổi quà bằng điểm tích lũy hội viên
+                    </p>
+
+                    <div style="font-size:18px; font-weight:700; color:#d97706; margin-bottom:14px;">
+                        {{ item.diem_yeu_cau }} điểm
+                    </div>
+
+                    {% if hoi_vien.diem_tich_luy >= item.diem_yeu_cau %}
+                        <form method="post" action="{% url 'tich_diem:doi_diem_hoi_vien' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    style="width:100%; background:#f4c430; color:#111827; border:none; padding:12px 16px; border-radius:10px; font-weight:800; cursor:pointer;">
+                                Đổi ngay
+                            </button>
+                        </form>
+                    {% else %}
+                        <button disabled
+                                style="width:100%; background:#e5e7eb; color:#9ca3af; border:none; padding:12px 16px; border-radius:10px; font-weight:800;">
+                            Không đủ điểm
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column:1/-1; background:#fff; padding:24px; border-radius:16px; text-align:center; color:#6b7280;">
+                Hiện chưa có phần thưởng nào để đổi.
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

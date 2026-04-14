@@ -1,0 +1,60 @@
+{% extends 'base_customer.html' %}
+{% load humanize %}
+
+{% block title %}Xác nhận đăng ký gói tập{% endblock %}
+
+{% block content %}
+<div class="confirm-package-page">
+    <div class="confirm-package-box">
+        <h2>Đăng ký gói tập</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="info-grid">
+                <div>
+                    <label>Họ tên</label>
+                    <input type="text" value="{{ hoi_vien.ho_ten }}" readonly>
+                </div>
+                <div>
+                    <label>Số điện thoại</label>
+                    <input type="text" value="{{ hoi_vien.so_dien_thoai }}" readonly>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="text" value="{{ hoi_vien.email }}" readonly>
+                </div>
+                <div>
+                    <label>Mã gói</label>
+                    <input type="text" value="{{ goi_tap.ma_goi }}" readonly>
+                </div>
+                <div>
+                    <label>Tên gói</label>
+                    <input type="text" value="{{ goi_tap.ten_goi }}" readonly>
+                </div>
+                <div>
+                    <label>Loại gói</label>
+                    <input type="text" value="{{ goi_tap.get_loai_goi_display }}" readonly>
+                </div>
+                <div>
+                    <label>Thời hạn / Số buổi</label>
+                    <input type="text" value="{{ goi_tap.thoi_han_so_buoi }}" readonly>
+                </div>
+                <div>
+                    <label>Giá</label>
+                    <input type="text" value="{{ goi_tap.gia_goi|intcomma }}đ" readonly>
+                </div>
+                <div class="full-width">
+                    <label>Ngày bắt đầu hiệu lực</label>
+                    <input type="date" name="ngay_bat_dau" value="{{ hom_nay|date:'Y-m-d' }}" required>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'khach_hang:goi_tap_hoi_vien' %}" class="btn-back">Quay lại</a>
+                <button type="submit" class="btn-confirm">Xác nhận</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

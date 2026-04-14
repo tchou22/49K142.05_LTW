@@ -1,0 +1,36 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/chatbot_widget.css' %}">
+
+<div class="fy-chatbot">
+    <button id="chatbotToggle" class="chatbot-toggle" type="button">💬</button>
+
+    <div id="chatbotBox" class="chatbot-box chatbot-hidden">
+        <div class="chatbot-header">
+            <div class="chatbot-brand">
+                <span>Flying Yoga</span>
+            </div>
+            <button id="chatbotClose" class="chatbot-close" type="button">×</button>
+        </div>
+
+        <div id="chatbotMessages" class="chatbot-messages">
+            <div class="msg bot">
+                Xin chào! Tôi có thể giúp bạn về gói tập, lịch tập, ưu đãi hoặc tư vấn.
+            </div>
+
+            <div class="quick-wrap">
+                <button type="button" class="quick-btn">Gói tập</button>
+                <button type="button" class="quick-btn">Lịch tập</button>
+                <button type="button" class="quick-btn">Ưu đãi</button>
+                <button type="button" class="quick-btn">Tư vấn cho tôi</button>
+            </div>
+        </div>
+
+        <div class="chatbot-input">
+            <input id="chatbotInput" type="text" placeholder="Nhập tin nhắn...">
+            <button id="chatbotSend" type="button">➤</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/chatbot_widget.js' %}"></script>

@@ -1,0 +1,141 @@
+{% extends 'base_customer.html' %}
+{% block page_title %}Đánh giá / Khiếu nại{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block nav_khieu_nai %}active{% endblock %}
+
+{% block content %}
+<style>
+    .custom-form select,
+    .custom-form input,
+    .custom-form textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        color: #4b5563;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .custom-form select {
+        background-color: #f3f4f6;
+        appearance: none;
+    }
+
+    .custom-form textarea {
+        min-height: 140px;
+        resize: vertical;
+    }
+
+    .custom-form select:focus,
+    .custom-form input:focus,
+    .custom-form textarea:focus {
+        border-color: #f4c430;
+    }
+</style>
+
+<div style="padding: 32px; background-color: #f9fafb; min-height: 100vh;">
+    <div style="max-width: 650px; margin: 0 auto;">
+        <div class="custom-form" style="background: #fff; border-radius: 12px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #f3f4f6;">
+
+            <div style="width: 56px; height: 56px; background-color: #fef3c7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35L10.55 20.03C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3C9.24 3 10.91 3.81 12 5.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5C22 12.28 18.6 15.36 13.45 20.04L12 21.35Z" fill="#f59e0b"/>
+                </svg>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h2 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 12px;">
+                    Chúng tôi luôn lắng nghe bạn
+                </h2>
+                <p style="color: #6b7280; font-size: 14px; line-height: 1.5; margin: 0;">
+                    Mọi góp ý của bạn sẽ giúp Flying Yoga cải thiện dịch vụ tốt hơn.
+                </p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="margin-bottom: 18px; padding: 14px 16px; border-radius: 8px; background: #ecfdf5; color: #166534; font-size: 14px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div style="margin-bottom: 18px; padding: 14px 16px; border-radius: 8px; background: #fef2f2; color: #b91c1c; font-size: 14px;">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display:block; font-size: 14px; font-weight:600; margin-bottom:8px; color:#374151;">
+                        Bạn muốn viết về điều gì? <span style="color: #ef4444;">*</span>
+                    </label>
+                    {{ form.chu_de }}
+                    {% if form.chu_de.errors %}
+                        <div style="margin-top:6px; color:#dc2626; font-size:13px;">
+                            {{ form.chu_de.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="vanDeKhacBox" style="margin-bottom: 24px; display: none;">
+                    <label style="display:block; font-size: 14px; font-weight:600; margin-bottom:8px; color:#374151;">
+                        Mô tả vấn đề khác <span style="color: #ef4444;">*</span>
+                    </label>
+                    {{ form.mo_ta_van_de_khac }}
+                    {% if form.mo_ta_van_de_khac.errors %}
+                        <div style="margin-top:6px; color:#dc2626; font-size:13px;">
+                            {{ form.mo_ta_van_de_khac.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 32px;">
+                    <label style="display:block; font-size: 14px; font-weight:600; margin-bottom:8px; color:#374151;">
+                        Nội dung chi tiết <span style="color: #ef4444;">*</span>
+                    </label>
+                    {{ form.noi_dung_khach }}
+                    {% if form.noi_dung_khach.errors %}
+                        <div style="margin-top:6px; color:#dc2626; font-size:13px;">
+                            {{ form.noi_dung_khach.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <button type="submit"
+                            style="background: #fbd34d; color: #374151; border: none; padding: 12px 40px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+                        Xác nhận gửi
+                    </button>
+                </div>
+
+                <p style="margin-top: 16px; text-align:center; color:#9ca3af; font-size:13px;">
+                    Thông tin của bạn sẽ được bảo mật tuyệt đối.
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chuDe = document.getElementById('id_chu_de');
+        const vanDeKhacBox = document.getElementById('vanDeKhacBox');
+
+        function toggleVanDeKhac() {
+            if (!chuDe || !vanDeKhacBox) return;
+            vanDeKhacBox.style.display = chuDe.value === 'van_de_khac' ? 'block' : 'none';
+        }
+
+        toggleVanDeKhac();
+        if (chuDe) {
+            chuDe.addEventListener('change', toggleVanDeKhac);
+        }
+    });
+</script>
+{% endblock %}

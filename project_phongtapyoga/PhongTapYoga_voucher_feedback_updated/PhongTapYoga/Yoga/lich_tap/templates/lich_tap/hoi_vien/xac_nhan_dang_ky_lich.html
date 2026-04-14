@@ -1,0 +1,56 @@
+{% extends 'base_customer.html' %}
+{% load static %}
+
+{% block title %}Xác Nhận Đăng Ký Lịch Tập{% endblock %}
+{% block nav_lich_tap %}active{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/hoi_vien/xac_nhan_dang_ky_lich_tap.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="confirm-page">
+    <div class="confirm-card">
+        <div class="confirm-header">
+            <h2>Xác nhận đăng ký lịch tập</h2>
+        </div>
+
+        <div class="confirm-body">
+            <div class="info-box">
+                <p><strong>Hội viên:</strong> {{ hoi_vien.ho_ten }}</p>
+                <p><strong>Gói tập:</strong> {{ goi_tap.ten_goi }}</p>
+                <p><strong>Số buổi đã chọn:</strong> {{ lich_da_chon|length }}</p>
+            </div>
+
+            <h3 class="section-title">Các buổi tập bạn đã chọn</h3>
+
+            <div class="schedule-list">
+                {% for lich in lich_da_chon %}
+                    <div class="schedule-item">
+                        <div class="title">{{ lich.khoa_hoc }}</div>
+                        <div class="time">
+                            {{ lich.get_thu_display }} |
+                            {{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form method="post" action="{% url 'lich_tap:luu_dang_ky_lich' %}">
+                {% csrf_token %}
+                {% for id in lich_ids %}
+                    <input type="hidden" name="lich_hocs" value="{{ id }}">
+                {% endfor %}
+
+                <div class="action-row">
+                    <a href="{% url 'lich_tap:dang_ky_lich_hoc_cua_toi' %}" class="btn-back">Quay lại</a>
+                    <button type="submit" class="btn-save">Xác nhận</button>
+                </div>
+            </form>
+
+            <div class="note-box">
+                Vui lòng kiểm tra kỹ thông tin trước khi xác nhận. Sau khi lưu, lịch tập sẽ được ghi nhận vào tài khoản của bạn.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

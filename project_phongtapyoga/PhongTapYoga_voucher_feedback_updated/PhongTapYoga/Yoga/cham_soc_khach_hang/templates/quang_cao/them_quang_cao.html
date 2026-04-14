@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Thêm chương trình quảng cáo{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quang_cao.css' %}">
+{% endblock %}
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-box">
+        <h2>Thêm chương trình quảng cáo</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Tên chương trình <span style="color:red">*</span></label>
+                {{ form.ten_chuong_trinh }}
+                {{ form.ten_chuong_trinh.errors }}
+            </div>
+
+            <div class="form-group">
+                <label>Nội dung <span style="color:red">*</span></label>
+                {{ form.noi_dung }}
+                {{ form.noi_dung.errors }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ngày bắt đầu <span style="color:red">*</span></label>
+                    {{ form.ngay_bat_dau }}
+                    {{ form.ngay_bat_dau.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label>Ngày kết thúc <span style="color:red">*</span></label>
+                    {{ form.ngay_ket_thuc }}
+                    {{ form.ngay_ket_thuc.errors }}
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div style="color: red; margin-bottom: 12px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-actions">
+                <a href="{% url 'cham_soc_khach_hang:danh_sach_quang_cao' %}" class="btn btn-light-gray">Hủy</a>
+                <button type="submit" class="btn btn-warning">Lưu thông tin</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

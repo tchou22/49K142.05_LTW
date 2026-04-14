@@ -1,0 +1,228 @@
+{% extends 'base_customer.html' %}
+{% load humanize %}
+
+{% block page_title %}Các Gói Tập Flying Yoga{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block nav_goi_tap %}active{% endblock %}
+{% block content %}
+<style>
+.package-page {
+    background: #f6f6f6;
+    min-height: 100vh;
+    padding: 0;
+}
+.package-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 18px 24px 14px 24px;
+    margin-bottom: 24px;
+}
+.package-header h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+}
+.package-header p {
+    margin: 6px 0 0 0;
+    color: #555;
+    font-size: 15px;
+}
+.message-wrapper {
+    padding: 0 24px 16px 24px;
+}
+.alert-message {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.alert-message.success {
+    background: #eaf8ee;
+    color: #1f7a3f;
+    border: 1px solid #bde5c8;
+}
+.alert-message.error {
+    background: #fff1f1;
+    color: #c62828;
+    border: 1px solid #f0b7b7;
+}
+.alert-message.warning {
+    background: #fff8e6;
+    color: #a36b00;
+    border: 1px solid #eed28e;
+}
+.package-grid {
+    padding: 0 36px 36px 36px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 34px;
+}
+.package-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 22px 22px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    min-height: 250px;
+    transition: 0.2s ease;
+    border: 2px solid transparent;
+}
+.package-card:hover {
+    transform: translateY(-2px);
+}
+.package-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+}
+.package-card .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f0ad00;
+    margin-bottom: 10px;
+}
+.package-card .duration {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 16px;
+}
+.benefit-list {
+    min-height: 78px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.6;
+}
+.benefit-list p {
+    margin: 0;
+}
+.package-action {
+    margin-top: auto;
+}
+.btn-package {
+    display: inline-block;
+    min-width: 118px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.btn-register {
+    background: #f2b300;
+    color: #111;
+}
+.btn-register:hover {
+    background: #deaa0b;
+}
+.btn-current {
+    background: #28a745;
+    color: #fff;
+    cursor: not-allowed;
+}
+.btn-disabled {
+    background: #cfcfcf;
+    color: #666;
+    cursor: not-allowed;
+}
+.active-package {
+    border: 2px solid #f2b300;
+    box-shadow: 0 4px 16px rgba(242, 179, 0, 0.2);
+}
+.current-note {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #777;
+    font-style: italic;
+}
+.empty-package {
+    grid-column: 1 / -1;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    color: #666;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+@media (max-width: 1100px) {
+    .package-grid {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+    }
+}
+@media (max-width: 700px) {
+    .package-grid {
+        grid-template-columns: 1fr;
+        padding: 0 18px 24px 18px;
+    }
+    .package-header,
+    .message-wrapper {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}
+</style>
+<div class="package-page">
+    {% if messages %}
+        <div class="message-wrapper">
+            {% for message in messages %}
+                <div class="alert-message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="package-grid">
+        {% for goi in ds_goi %}
+            <div class="package-card {% if hoi_vien.goi_dang_su_dung and hoi_vien.goi_dang_su_dung.id == goi.id and hoi_vien.ngay_het_han_goi >= hom_nay %}active-package{% endif %}">
+                <h3>{{ goi.ten_goi }}</h3>
+
+                <div class="price">{{ goi.gia_goi|floatformat:0|intcomma }}đ</div>
+
+                <div class="duration">
+                    {% if goi.loai_goi == 'thang' %}
+                        {{ goi.thoi_han_so_buoi }} tháng
+                    {% else %}
+                        {{ goi.thoi_han_so_buoi }} buổi
+                    {% endif %}
+                </div>
+
+                <div class="benefit-list">
+                    {% if goi.ghi_chu %}
+                        <p>{{ goi.ghi_chu|linebreaksbr }}</p>
+                    {% else %}
+                        <p>Chưa có mô tả quyền lợi</p>
+                    {% endif %}
+                </div>
+
+                <div class="package-action">
+                    {% if hoi_vien.goi_dang_su_dung and hoi_vien.goi_dang_su_dung.id == goi.id and hoi_vien.ngay_het_han_goi >= hom_nay %}
+                        <button class="btn-package btn-current" disabled>Đang sử dụng</button>
+                    {% elif co_goi_con_han %}
+                        <button class="btn-package btn-disabled" disabled>Không thể đăng ký</button>
+                    {% else %}
+                        <a href="{% url 'khach_hang:dang_ky_goi_tap' goi.id %}" class="btn-package btn-register">Đăng ký</a>
+                    {% endif %}
+                </div>
+
+                {% if hoi_vien.goi_dang_su_dung and hoi_vien.goi_dang_su_dung.id == goi.id and hoi_vien.ngay_het_han_goi >= hom_nay %}
+                    <div class="current-note">
+                        Hạn đến: {{ hoi_vien.ngay_het_han_goi|date:"d/m/Y" }}
+                    </div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="empty-package">
+                Hiện chưa có gói tập nào đang hoạt động.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quản lý Khách hàng{% endblock %}
+{% block page_title %}QUẢN LÝ KHÁCH HÀNG{% endblock %}
+{% block nav_khach_hang %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers.css' %}">
+<style>
+    .customer-form-uniform,
+    .customer-form-uniform *,
+    .customer-form-uniform input,
+    .customer-form-uniform select,
+    .customer-form-uniform textarea,
+    .customer-form-uniform button,
+    .customer-form-uniform a {
+        font-family: 'Inter', sans-serif !important;
+    }
+
+    .customer-form-uniform .form-control,
+    .customer-form-uniform textarea,
+    .customer-form-uniform select {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: #757575;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div id="view-main" {% if view_mode != 'list' %}style="display:none;"{% endif %}>
+    <div class="page-subheader">
+        <div>
+            <h2>Danh sách khách hàng</h2>
+            <p>Quản lý khách mới, khách tư vấn và chuyển đổi hội viên</p>
+        </div>
+        <div class="header-actions">
+            <a href="{% url 'khach_hang:danh_sach_khach_hang' %}?view=add" class="btn-add" style="text-decoration:none;">
+                 Thêm khách hàng
+            </a>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <form method="get" action="{% url 'khach_hang:danh_sach_khach_hang' %}" class="search-bar">
+            <input type="text" name="q" placeholder="Tìm theo mã, tên, SĐT, email..." value="{{ q }}">
+            <select name="trang_thai">
+                <option value="">Tất cả trạng thái</option>
+                <option value="moi" {% if trang_thai == 'moi' %}selected{% endif %}>Mới</option>
+                <option value="da_chuyen_hoi_vien" {% if trang_thai == 'da_chuyen_hoi_vien' %}selected{% endif %}>Đã chuyển hội viên</option>
+            </select>
+            <button class="btn-search" type="submit">
+                <i class="fas fa-search"></i> Tìm kiếm
+            </button>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th>Mã KH</th>
+                        <th>Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th>Chuyển hội viên</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for kh in ds_khach_hang %}
+                    <tr>
+                        <td>{{ kh.ma_khach_hang }}</td>
+                        <td>{{ kh.ho_ten }}</td>
+                        <td>{{ kh.so_dien_thoai }}</td>
+                        <td>{{ kh.email|default:"-" }}</td>
+                        <td>
+                            {% if kh.trang_thai == 'moi' %}
+                                <span class="status-badge badge-moi">Mới</span>
+                            {% elif kh.trang_thai == 'tu_van' %}
+                                <span class="status-badge badge-tu-van">Đang tư vấn</span>
+                            {% elif kh.trang_thai == 'da_chuyen_hoi_vien' %}
+                                <span class="status-badge badge-da_chuyen_hoi_vien">Đã chuyển hội viên</span>
+                            {% else %}
+                                <span class="status-badge">{{ kh.get_trang_thai_display }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if kh.trang_thai != 'da_chuyen_hoi_vien' %}
+                            <form method="post" action="{% url 'khach_hang:chuyen_thanh_hoi_vien' kh.id %}" class="form-chuyen-hv">
+                                {% csrf_token %}
+
+                                <select name="goi_dang_su_dung" class="form-control">
+                                    <option value="">Chọn gói</option>
+                                    {% for goi in ds_goi_tap %}
+                                        <option value="{{ goi.id }}">{{ goi.ten_goi }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <input type="date" name="ngay_het_han_goi" class="form-control">
+
+                                <button type="submit" class="btn-chuyen-hv">
+                                    <i class="fas fa-user-check"></i> Chuyển HV
+                                </button>
+                            </form>
+                            {% else %}
+                                <span class="status-badge badge-da_chuyen_hoi_vien">Đã là hội viên</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="action-icons">
+                                <a href="{% url 'khach_hang:danh_sach_khach_hang' %}?view=detail&id={{ kh.id }}" title="Xem chi tiết">
+                                    <i class="fa-solid fa-eye icon-check"></i>
+                                </a>
+
+                                <a href="{% url 'khach_hang:danh_sach_khach_hang' %}?view=detail&id={{ kh.id }}" title="Chỉnh sửa">
+                                    <i class="fa-solid fa-pen-to-square icon-edit"></i>
+                                </a>
+
+                                <form method="post" action="{% url 'khach_hang:xoa_khach_hang' kh.id %}" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
+                                    {% csrf_token %}
+                                    <button type="submit" title="Xóa">
+                                        <i class="fa-solid fa-trash icon-delete"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:24px;">Chưa có khách hàng nào.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="view-add" {% if view_mode != 'add' %}style="display:none;"{% endif %}>
+    <div class="detail-header">
+        <div class="breadcrumb">
+            <a href="{% url 'khach_hang:danh_sach_khach_hang' %}">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <span>/</span>
+            <span style="font-weight:600; color:var(--text-dark);">Thêm khách hàng</span>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'khach_hang:them_khach_hang' %}" class="customer-form-uniform">
+        {% csrf_token %}
+        <div class="form-card">
+            <div class="add-form-grid">
+                <div class="upload-avatar-box">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Avatar">
+                    <div class="upload-text">Ảnh đại diện mặc định</div>
+                </div>
+
+                <div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mã khách hàng <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="ma_khach_hang" value="{{ form_data.ma_khach_hang|default:ma_khach_hang_moi }}" readonly required>
+                        </div>
+                        <div class="form-group">
+                            <label>Họ và tên <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="ho_ten" value="{{ form_data.ho_ten|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ngày sinh</label>
+                            <input type="date" class="form-control" name="ngay_sinh" value="{{ form_data.ngay_sinh|default:'' }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Giới tính</label>
+                            <select class="form-control" name="gioi_tinh">
+                                <option value="" {% if form_data.gioi_tinh == '' or not form_data.gioi_tinh %}selected{% endif %}>Chọn giới tính</option>
+                                <option value="Nam" {% if form_data.gioi_tinh == 'Nam' %}selected{% endif %}>Nam</option>
+                                <option value="Nữ" {% if form_data.gioi_tinh == 'Nữ' %}selected{% endif %}>Nữ</option>
+                                <option value="Khác" {% if form_data.gioi_tinh == 'Khác' %}selected{% endif %}>Khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Số điện thoại <span class="required">*</span></label>
+                            <input type="text" class="form-control js-phone-input" name="so_dien_thoai" value="{{ form_data.so_dien_thoai|default:'' }}" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Số điện thoại phải gồm đúng 10 chữ số" required>
+                            <small class="field-hint">Số điện thoại phải gồm đúng 10 chữ số.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ form_data.email|default:'' }}" maxlength="254">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" class="form-control" name="dia_chi" value="{{ form_data.dia_chi|default:'' }}">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tình trạng sức khỏe</label>
+                            <textarea class="form-control health-textarea" rows="3" name="tinh_trang_suc_khoe">{{ form_data.tinh_trang_suc_khoe|default:'' }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Mục tiêu tập luyện</label>
+                            <textarea class="form-control goal-textarea" rows="3" name="muc_tieu_tap_luyen">{{ form_data.muc_tieu_tap_luyen|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ghi chú nhân viên</label>
+                        <textarea class="form-control" rows="3" name="ghi_chu_nhan_vien">{{ form_data.ghi_chu_nhan_vien|default:'' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select class="form-control" name="trang_thai">
+                            <option value="moi" {% if form_data.trang_thai == 'moi' or not form_data.trang_thai %}selected{% endif %}>Mới</option>
+                            <option value="tu_van" {% if form_data.trang_thai == 'tu_van' %}selected{% endif %}>Đang tư vấn</option>
+                            <option value="da_chuyen_hoi_vien" {% if form_data.trang_thai == 'da_chuyen_hoi_vien' %}selected{% endif %}>Đã chuyển hội viên</option>
+                        </select>
+                    </div>
+
+                    <div class="header-buttons">
+                        <a href="{% url 'khach_hang:danh_sach_khach_hang' %}" class="btn-cancel" style="text-decoration:none;">Hủy</a>
+                        <button type="submit" class="btn-save">
+                            Lưu khách hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="view-detail" {% if view_mode != 'detail' or not selected_customer %}style="display:none;"{% endif %}>
+    {% if selected_customer %}
+    <div class="detail-header">
+        <div class="breadcrumb">
+            <a href="{% url 'khach_hang:danh_sach_khach_hang' %}">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <span>/</span>
+            <span style="font-weight:600; color:var(--text-dark);">Chi tiết khách hàng</span>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'khach_hang:sua_khach_hang' selected_customer.id %}" class="customer-form-uniform">
+        {% csrf_token %}
+        <div class="profile-grid">
+            <div class="column">
+                <div class="profile-card">
+                    <div class="avatar-section">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Avatar" class="avatar-img">
+                        <h2 class="customer-name">{{ selected_customer.ho_ten }}</h2>
+                        <p class="customer-id">Mã KH: <strong>{{ selected_customer.ma_khach_hang }}</strong></p>
+
+                        {% if selected_customer.trang_thai == 'moi' %}
+                            <span class="status-badge badge-moi">Mới</span>
+                        {% elif selected_customer.trang_thai == 'tu_van' %}
+                            <span class="status-badge badge-tu-van">Đang tư vấn</span>
+                        {% elif selected_customer.trang_thai == 'da_chuyen_hoi_vien' %}
+                            <span class="status-badge badge-da_chuyen_hoi_vien">Đã chuyển hội viên</span>
+                        {% else %}
+                            <span class="badge-vip">{{ selected_customer.get_trang_thai_display }}</span>
+                        {% endif %}
+                    </div>
+
+                    <ul class="contact-list">
+                        <li><i class="fas fa-phone-alt"></i> {{ selected_customer.so_dien_thoai }}</li>
+                        <li><i class="far fa-envelope"></i> {{ selected_customer.email|default:"Chưa có email" }}</li>
+                        <li><i class="fas fa-map-marker-alt"></i> {{ selected_customer.dia_chi|default:"Chưa có địa chỉ" }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="profile-card">
+                    <div class="card-title">Thông tin cơ bản</div>
+
+                    <div class="form-group">
+                        <label>Mã khách hàng</label>
+                        <input type="text" class="form-control" name="ma_khach_hang" value="{{ selected_customer.ma_khach_hang }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Họ và tên</label>
+                        <input type="text" class="form-control" name="ho_ten" value="{{ selected_customer.ho_ten }}">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ngày sinh</label>
+                            <input type="date" class="form-control" name="ngay_sinh" value="{{ selected_customer.ngay_sinh|date:'Y-m-d' }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giới tính</label>
+                            <select class="form-control" name="gioi_tinh">
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam" {% if selected_customer.gioi_tinh == 'Nam' %}selected{% endif %}>Nam</option>
+                                <option value="Nữ" {% if selected_customer.gioi_tinh == 'Nữ' %}selected{% endif %}>Nữ</option>
+                                <option value="Khác" {% if selected_customer.gioi_tinh == 'Khác' %}selected{% endif %}>Khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="text" class="form-control js-phone-input" name="so_dien_thoai" value="{{ selected_customer.so_dien_thoai }}" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Số điện thoại phải gồm đúng 10 chữ số">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" value="{{ selected_customer.email }}" maxlength="254">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input type="text" class="form-control" name="dia_chi" value="{{ selected_customer.dia_chi }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select class="form-control" name="trang_thai">
+                            <option value="moi" {% if selected_customer.trang_thai == 'moi' %}selected{% endif %}>Mới</option>
+                            <option value="tu_van" {% if selected_customer.trang_thai == 'tu_van' %}selected{% endif %}>Đang tư vấn</option>
+                            <option value="da_chuyen_hoi_vien" {% if selected_customer.trang_thai == 'da_chuyen_hoi_vien' %}selected{% endif %}>Đã chuyển hội viên</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="profile-card">
+                    <div class="card-title red-line">Thông tin bổ sung</div>
+
+                    <div class="form-group">
+                        <label>Tình trạng sức khỏe</label>
+                        <textarea class="form-control health-textarea" rows="4" name="tinh_trang_suc_khoe">{{ selected_customer.tinh_trang_suc_khoe }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mục tiêu tập luyện</label>
+                        <textarea class="form-control goal-textarea" rows="4" name="muc_tieu_tap_luyen">{{ selected_customer.muc_tieu_tap_luyen }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ghi chú nhân viên</label>
+                        <textarea class="form-control" rows="4" name="ghi_chu_nhan_vien">{{ selected_customer.ghi_chu_nhan_vien }}</textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{% url 'khach_hang:danh_sach_khach_hang' %}" class="btn-cancel" style="text-decoration:none;">Hủy</a>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Cập nhật
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.js-phone-input').forEach(function(input) {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            if (this.value.length === 0 || this.value.length === 10) {
+                this.setCustomValidity('');
+            } else {
+                this.setCustomValidity('Số điện thoại phải gồm đúng 10 chữ số.');
+            }
+        });
+
+        input.addEventListener('invalid', function() {
+            if (!/^\d{10}$/.test(this.value)) {
+                this.setCustomValidity('Số điện thoại phải gồm đúng 10 chữ số.');
+            }
+        });
+    });
+</script>
+{% endblock %}

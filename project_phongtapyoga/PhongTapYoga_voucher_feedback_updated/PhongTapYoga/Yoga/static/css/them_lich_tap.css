@@ -1,0 +1,208 @@
+.lich-page {
+    padding: 8px 0 0;
+}
+
+.lich-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border: 1px solid #eceff3;
+}
+
+.lich-card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eceff3;
+    background: #ffffff;
+}
+
+.lich-card-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.lich-form {
+    padding: 20px 24px 0;
+}
+
+.form-row {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.form-row.two-col {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group.full-width {
+    width: 100%;
+}
+
+.form-group label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group label span {
+    color: #ef4444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid #d9dee7;
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 14px;
+    color: #111827;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #f4b400;
+    box-shadow: 0 0 0 3px rgba(244, 180, 0, 0.15);
+}
+
+.thu-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.thu-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #d9dee7;
+    border-radius: 999px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.thu-item:hover {
+    border-color: #f4b400;
+    background: #fffaf0;
+}
+
+.thu-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #f4b400;
+    cursor: pointer;
+}
+
+.thu-item span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.form-error {
+    margin-top: 8px;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.lich-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px 20px;
+    border-top: 1px solid #eceff3;
+    margin-top: 8px;
+    background: #ffffff;
+}
+
+.btn-cancel,
+.btn-save {
+    min-width: 84px;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background: #ffffff;
+    color: #374151;
+    border: 1px solid #d9dee7;
+}
+
+.btn-cancel:hover {
+    background: #f9fafb;
+    color: #111827;
+}
+
+.btn-save {
+    background: #f4b400;
+    color: #111827;
+}
+
+.btn-save:hover {
+    background: #dea300;
+}
+
+@media (max-width: 768px) {
+    .lich-form {
+        padding: 18px 16px 0;
+    }
+
+    .lich-card-header {
+        padding: 18px 16px;
+    }
+
+    .lich-card-header h2 {
+        font-size: 20px;
+    }
+
+    .lich-card-footer {
+        padding: 16px;
+        flex-wrap: wrap;
+    }
+
+    .form-row.two-col {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-cancel,
+    .btn-save {
+        width: 100%;
+    }
+}

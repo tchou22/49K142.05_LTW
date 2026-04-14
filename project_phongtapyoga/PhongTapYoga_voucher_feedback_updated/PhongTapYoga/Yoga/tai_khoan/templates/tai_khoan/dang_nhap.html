@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Flying Yoga</title>
+    <link rel="stylesheet" href="{% static 'css/dang_nhap.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-left">
+            <div class="brand-box">
+                <div class="logo-circle">
+                    <img src="{% static 'images/logo.png' %}" alt="Flying Yoga Logo">
+                </div>
+                <div class="brand-text">
+                    <h1>FLYING YOGA</h1>
+                    <p>Nơi cơ thể và tâm hồn được tự do bay bổng</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-right">
+            <div class="login-card">
+                <h2>Chào mừng trở lại!</h2>
+                <p class="subtitle">Vui lòng đăng nhập để tiếp tục truy cập hệ thống.</p>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label>Email / Số điện thoại</label>
+                       <input type="text" name="username" placeholder="Nhập email hoặc tên đăng nhập" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input type="password" name="password" placeholder="Nhập mật khẩu của bạn" required>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember_me">
+                            <span>Ghi nhớ tôi</span>
+                        </label>
+
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

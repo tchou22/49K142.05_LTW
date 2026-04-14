@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}QUẢN LÝ LỊCH TẬP{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lich_tap.css' %}?v=3">
+{% endblock %}
+
+{% block content %}
+<div class="schedule-header">
+    <a href="{% url 'lich_tap:them_lich_hoc' %}" class="btn-add-schedule">
+        Thêm lịch học
+    </a>
+</div>
+
+<div class="card">
+    <form method="get" class="filter-form">
+        <input type="text" name="q" placeholder="Tìm mã lịch..." value="{{ q }}">
+
+        <select name="thu">
+            <option value="">Tất cả thứ</option>
+            {% for value, label in thu_choices %}
+                <option value="{{ value }}" {% if thu == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="trang_thai">
+            <option value="">Tất cả trạng thái</option>
+            <option value="True" {% if trang_thai == 'True' %}selected{% endif %}>Hoạt động</option>
+            <option value="False" {% if trang_thai == 'False' %}selected{% endif %}>Ngưng</option>
+        </select>
+
+        <button type="submit">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã lịch</th>
+                <th>Khóa học</th>
+                <th>Thứ</th>
+                <th>Giờ học</th>
+                <th>Phòng</th>
+                <th>HLV</th>
+                <th>Số chỗ</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lich in lich_hoc_list %}
+            <tr>
+                <td>{{ lich.ma_lich }}</td>
+                <td>{{ lich.goi_tap }}</td>
+                <td>
+                    {% for item in lich.ds_thu %}
+                        {{ item }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</td>
+                <td>{{ lich.phong }}</td>
+                <td>{{ lich.hlv_phu_trach }}</td>
+                <td>{{ lich.so_cho_toi_da }}</td>
+                <td>
+                    {% if lich.trang_thai %}
+                        <span class="badge bg-success">Hoạt động</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Ngưng</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="action-links">
+                        <a href="{% url 'lich_tap:sua_lich_hoc' lich.id %}" title="Sửa">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+
+                        <form method="post" action="{% url 'lich_tap:xoa_lich_hoc' lich.id %}">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Bạn có chắc muốn xóa lịch học này không?')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Chưa có lịch học nào.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

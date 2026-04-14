@@ -1,0 +1,66 @@
+{% extends 'base_guest.html' %}
+{% load humanize static %} {% block title %}Gói tập | Flying Yoga{% endblock %}
+{% block nav_goi_tap %}active{% endblock %}
+
+{% block page_title %}Các Gói Tập Flying Yoga{% endblock %}
+{% block page_subtitle %}Khám phá các gói tập phù hợp với nhu cầu và hành trình luyện tập của bạn{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/guest/goi_tap_guest.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="packages-page">
+    <div class="section-heading">
+        <h2>Danh mục gói tập</h2>
+        <p>Lựa chọn chương trình phù hợp với thể trạng, mục tiêu và thời gian của bạn.</p>
+    </div>
+
+    <div class="package-grid">
+        {% for goi in ds_goi_tap %}
+            <div class="package-card">
+                <div class="package-badge">
+                    {{ goi.get_loai_goi_display }}
+                </div>
+
+                <h3>{{ goi.ten_goi }}</h3>
+
+                <div class="package-meta">
+                    <span class="package-code">{{ goi.ma_goi }}</span>
+                    <span class="package-status">{{ goi.get_trang_thai_display }}</span>
+                </div>
+
+                <div class="package-price">
+                    {{ goi.gia_goi|intcomma }}đ
+                </div>
+
+                <ul class="package-features">
+                    <li>
+                        {% if goi.loai_goi == 'buoi' %}
+                            {{ goi.thoi_han_so_buoi }} buổi tập
+                        {% else %}
+                            {{ goi.thoi_han_so_buoi }} tháng sử dụng
+                        {% endif %}
+                    </li>
+
+                    <li>Loại gói: {{ goi.get_loai_goi_display }}</li>
+
+                    {% if goi.ghi_chu %}
+                        <li>{{ goi.ghi_chu }}</li>
+                    {% else %}
+                        <li>Phù hợp cho hội viên đăng ký luyện tập tại Flying Yoga</li>
+                    {% endif %}
+                </ul>
+
+                <a href="#" class="package-btn" onclick="showRegNotify(); return false;">
+                    Đăng ký
+                </a>
+            </div>
+        {% empty %}
+            <div class="empty-package">
+                Hiện chưa có gói tập đang áp dụng.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

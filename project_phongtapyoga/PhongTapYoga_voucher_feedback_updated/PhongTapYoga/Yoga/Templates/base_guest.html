@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flying Yoga{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/guest/guest_base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="guest-layout">
+    <aside class="sidebar">
+        <div>
+            <div class="logo-box">
+                <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+                <div class="logo-text">
+                    <h3>FLYING YOGA</h3>
+                </div>
+            </div>
+
+            <nav class="menu">
+                <a href="{% url 'khach_hang:gioi_thieu_guest' %}" class="menu-item {% block nav_gioi_thieu %}{% endblock %}">
+                  <i class="fa-solid fa-house"></i>
+                  <span>Giới thiệu</span>
+              </a>
+                <a href="{% url 'khach_hang:goi_tap_guest' %}" class="menu-item {% block nav_goi_tap %}{% endblock %}">
+                  <i class="fa-solid fa-cube"></i>
+                  <span>Gói tập</span>
+              </a>
+
+                <a href="{% url 'khach_hang:lich_tap_guest' %}" class="menu-item {% block nav_lich_tap %}{% endblock %}">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span>Lịch tập</span>
+                </a>
+
+                <a href="{% url 'khach_hang:uu_dai_guest' %}" class="menu-item {% block nav_uu_dai %}{% endblock %}">
+                    <i class="fa-regular fa-credit-card"></i>
+                    <span>Ưu đãi</span>
+                </a>
+
+                <a href="{% url 'khach_hang:dang_ky_tu_van_guest' %}" class="menu-item {% block nav_tu_van %}{% endblock %}">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Đăng kí tư vấn</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline" onclick="showRegNotify(); return false;">Đăng ký</a>
+                <a href="{% url 'tai_khoan:dang_nhap' %}" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-text">
+                <h1>{% block page_title %}Chào Mừng Đến Với Flying Yoga{% endblock %}</h1>
+                <p>{% block page_subtitle %}Trải nghiệm yoga bay - Nơi cơ thể và tâm hồn được tự do bay bổng{% endblock %}</p>
+            </div>
+        </header>
+
+        <div class="page-content">
+            {% block content %}
+            <section class="hero-card">
+                <div class="hero-content">
+                    <h2>Nâng tầm trải nghiệm Yoga</h2>
+                    <p>
+                        Flying Yoga không chỉ là một phòng tập, đó là nơi khơi nguồn cảm hứng
+                        và sức khỏe bền vững. Với công nghệ quản lý hiện đại, chúng tôi đảm bảo
+                        mỗi giờ tập của hội viên đều là một hành trình tận hưởng trọn vẹn.
+                    </p>
+
+                    <div class="hero-tags">
+                        <span><i class="fa-solid fa-circle-check"></i> Chuẩn quốc tế</span>
+                        <span><i class="fa-solid fa-shield-heart"></i> An toàn tuyệt đối</span>
+                        <span><i class="fa-solid fa-star"></i> Dịch vụ 5 sao</span>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <img src="{% static 'images/yoga-banner.jpg' %}" alt="Flying Yoga">
+                </div>
+            </section>
+
+            <section class="feature-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h3>Cơ sở vật chất</h3>
+                    <p>
+                        Hệ thống đầy đủ cao cấp chịu lực 500kg, không gian tập luyện rộng rãi,
+                        sàn gỗ sưởi ấm và ánh sáng dịu nhẹ.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <h3>Đội ngũ Master</h3>
+                    <p>
+                        100% huấn luyện viên có bằng quốc tế Yoga Alliance, am hiểu chuyên sâu
+                        về giải phẫu học và trị liệu đau lưng.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fa-solid fa-clock"></i>
+                    <h3>Lịch tập linh hoạt</h3>
+                    <p>
+                        Hơn 50 lớp học mỗi tuần từ cơ bản đến chuyên sâu, phù hợp cho cả người
+                        mới bắt đầu và người tập lâu năm.
+                    </p>
+                </div>
+            </section>
+
+            <section class="stats-bar">
+                <div class="stat-item">
+                    <h3>2,500+</h3>
+                    <p>Hội viên tin dùng</p>
+                </div>
+                <div class="stat-item">
+                    <h3>15+</h3>
+                    <p>Cơ sở toàn quốc</p>
+                </div>
+                <div class="stat-item">
+                    <h3>4.9/5</h3>
+                    <p>Đánh giá hài lòng</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10,000+</h3>
+                    <p>Giờ dạy thành công</p>
+                </div>
+            </section>
+
+            {% endblock %}
+        </div>
+    </main>
+</div>
+
+<script>
+    function showRegNotify() {
+        alert("Vui lòng đến trực tiếp hoặc liên hệ Flying Yoga để được tư vấn và cung cấp tài khoản.");
+    }
+</script>
+
+{% block extra_js %}{% endblock %}
+{% include 'chatbot/widget.html' %}
+</body>
+</html>

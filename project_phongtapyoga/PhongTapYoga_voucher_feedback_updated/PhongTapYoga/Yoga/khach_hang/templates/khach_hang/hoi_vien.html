@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Danh sách hội viên{% endblock %}
+{% block page_title %}QUẢN LÝ KHÁCH HÀNG{% endblock %}
+{% block nav_hoi_vien %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers.css' %}">
+<style>
+    .member-page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:16px}
+    .member-page-header h2{font-size:24px;font-weight:700;margin:0 0 6px}
+    .member-page-header p{margin:0;color:#8a8a8a;font-size:13px}
+    .btn-add-new,.btn-yellow{background:#f4be2c;border:none;color:#1f1f1f;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+    .member-tabs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+    .member-tab{padding:10px 18px;border-radius:10px;background:#f5f5f5;font-weight:600;font-size:13px;text-decoration:none;color:#444;transition:.2s}
+    .member-tab:hover{background:#ececec}.member-tab.active{background:#f4be2c;color:#000}
+    .member-search-box,.member-table-card{background:#fff;border:1px solid #ececec;border-radius:14px;padding:16px;margin-bottom:16px}
+    .member-search-form{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+    .member-search-form input,
+    .member-search-form select,
+    .form-area input,
+    .form-area select,
+    .form-area textarea{
+        width:100%;
+        height:40px;
+        border:1px solid #ddd;
+        border-radius:8px;
+        padding:0 12px;
+        background:#fff;
+        font-size:13px;
+        box-sizing:border-box;
+    }
+
+    .form-area input[type="date"]{
+        width:100%;
+        min-width:100%;
+        display:block;
+    }
+
+    .member-search-form input{flex:1;min-width:220px}
+    .member-search-form select{min-width:220px}
+    .member-table{width:100%;border-collapse:collapse}.member-table th{font-size:11px;color:#666;font-weight:700;padding:14px 12px;border-bottom:1px solid #ececec;text-align:left;text-transform:uppercase}.member-table td{padding:14px 12px;font-size:13px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+    .member-code{font-weight:600;color:#5d6270}.member-name{margin-bottom:4px;font-size:14px}.member-phone{font-size:11px;color:#8c8c8c}.member-point{font-weight:600;color:#f28c28}
+
+    /* CSS cho Action Links đã được cập nhật */
+    .action-links{display:flex;gap:16px;align-items:center}
+    .action-links a,.action-links button{font-size:13px;opacity:.85;transition:.2s;text-decoration:none}
+    .action-links a:hover,.action-links button:hover{opacity:1;transform:scale(1.15)}
+    .action-view { color: #16a34a; }
+    .action-cal { color: #3b82f6; }
+    .action-edit { color: #f59e0b; }
+    .action-del { color: #ef4444; }
+
+    .empty-data{text-align:center;padding:24px;color:#8a8a8a;font-size:13px}.section-title{font-size:18px;font-weight:700;margin:0 0 16px}
+    .form-area label{display:block;font-weight:600;margin-bottom:6px;font-size:13px}
+    .form-area textarea{min-height:100px;height:auto;padding:12px;resize:vertical}
+    .badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-top:6px;white-space:nowrap}
+    .bg-success{background:#e6f4ea;color:#1e8e3e}.bg-secondary{background:#f3f4f6;color:#6b7280}.bg-warning{background:#fef7e0;color:#b06000}.bg-danger{background:#fad2e1;color:#9d0208}
+    .summary-box{background:#f8f8f8;border:1px solid #e5e5e5;border-radius:8px;padding:14px}
+    .payment-line{display:flex;justify-content:space-between;margin-bottom:8px}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="member-page-header">
+    <div>
+        <h2>Danh sách hội viên</h2>
+        <p>Quản lý thông tin, gia hạn và lịch sử</p>
+    </div>
+    <a href="{% url 'khach_hang:them_hoi_vien' %}" class="btn-add-new">Thêm mới</a>
+</div>
+
+<div class="member-tabs">
+    <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=danh_sach" class="member-tab {% if tab == 'danh_sach' or not tab %}active{% endif %}">Danh sách</a>
+    <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=gia_han" class="member-tab {% if tab == 'gia_han' %}active{% endif %}">Gia hạn/Đổi gói</a>
+    <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=lich_su" class="member-tab {% if tab == 'lich_su' %}active{% endif %}">Lịch sử tập</a>
+    <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=check_in" class="member-tab {% if tab == 'check_in' %}active{% endif %}">Check-in hội viên</a>
+</div>
+
+{% if tab == 'danh_sach' or not tab %}
+<div class="member-search-box">
+    <form method="get" class="member-search-form">
+        <input type="hidden" name="tab" value="danh_sach">
+        <input type="text" name="q" placeholder="Tìm kiếm tên, mã, số điện thoại..." value="{{ q|default:'' }}">
+        <select name="trang_thai">
+            <option value="">Tất cả trạng thái</option>
+            <option value="hoat_dong" {% if trang_thai == 'hoat_dong' %}selected{% endif %}>Hoạt động</option>
+            <option value="sap_het_han" {% if trang_thai == 'sap_het_han' %}selected{% endif %}>Sắp hết hạn</option>
+            <option value="het_han" {% if trang_thai == 'het_han' %}selected{% endif %}>Đã hết hạn</option>
+            <option value="chua_co_goi" {% if trang_thai == 'chua_co_goi' %}selected{% endif %}>Chưa có gói</option>
+        </select>
+        <button class="btn-yellow" type="submit">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="member-table-card">
+    <div style="overflow-x:auto;">
+        <table class="member-table">
+            <thead>
+                <tr><th>Mã</th><th>Thông tin</th><th>Gói tập</th><th>Hết hạn</th><th>Điểm</th><th>Check-in cuối</th><th>Thao tác</th></tr>
+            </thead>
+            <tbody>
+                {% for hv in ds_hoi_vien %}
+                <tr>
+                    <td class="member-code">{{ hv.ma_hoi_vien }}</td>
+                    <td><div class="member-name">{{ hv.ho_ten }}</div><div class="member-phone">{{ hv.so_dien_thoai }}</div></td>
+                    <td>{% if hv.goi_dang_su_dung %}{{ hv.goi_dang_su_dung.ten_goi }}{% else %}-{% endif %}</td>
+                    <td>
+                        {% if hv.ngay_het_han_goi %}
+                            {{ hv.ngay_het_han_goi|date:"d/m/Y" }}<br>
+                            {% if hv.trang_thai_goi == 'hoat_dong' %}<span class="badge bg-success">Hoạt động</span>
+                            {% elif hv.trang_thai_goi == 'sap_het_han' %}<span class="badge bg-warning">Sắp hết hạn</span>
+                            {% elif hv.trang_thai_goi == 'het_han' %}<span class="badge bg-danger">Đã hết hạn</span>
+                            {% else %}<span class="badge bg-secondary">Chưa có gói</span>{% endif %}
+                        {% else %}-<br><span class="badge bg-secondary">Chưa có gói</span>{% endif %}
+                    </td>
+                    <td class="member-point">{{ hv.diem_tich_luy }}</td>
+                    <td>{% if hv.check_in_cuoi %}{{ hv.check_in_cuoi|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
+                    <td>
+                        <div class="action-links">
+                            <a href="{% url 'khach_hang:chi_tiet_hoi_vien' hv.id %}" title="Xem" class="action-view"><i class="fa-solid fa-eye"></i></a>
+                            <a href="{% url 'lich_tap:dang_ky_lich_hoc' hv.id %}" title="Đăng ký lịch" class="action-cal"><i class="fa-solid fa-calendar-plus"></i></a>
+                            <a href="{% url 'khach_hang:sua_hoi_vien' hv.id %}" title="Sửa" class="action-edit"><i class="fa-solid fa-pen"></i></a>
+                            <form method="post" action="{% url 'khach_hang:xoa_hoi_vien' hv.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="action-del" onclick="return confirm('Bạn có chắc muốn xóa hội viên này không?')" style="border:none;background:none;cursor:pointer;padding:0;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="empty-data">Chưa có hội viên nào.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if tab == 'gia_han' %}
+<div class="member-table-card">
+    <h3 class="section-title">Gia hạn / Đổi gói</h3>
+    <div class="form-area">
+        <form method="post" action="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=gia_han" id="giaHanForm">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="gia_han_goi">
+
+            <div style="display:grid; grid-template-columns:2fr 1.2fr; gap:20px; margin-bottom:16px;">
+                <div>
+                    <label>Chọn hội viên</label>
+                    <select name="hoi_vien" id="id_hoi_vien" onchange="onChangeHoiVien()">
+                        <option value="">---------</option>
+                        {% for hv in form_gia_han.fields.hoi_vien.queryset %}
+                        <option value="{{ hv.id }}" {% if form_gia_han.hoi_vien.value|stringformat:'s' == hv.id|stringformat:'s' %}selected{% endif %}>{{ hv.ma_hoi_vien }} - {{ hv.ho_ten }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="summary-box">
+                    <div style="font-weight:700; margin-bottom:8px;">Gói tập hiện tại</div>
+                    {% if selected_member and selected_member.goi_dang_su_dung %}
+                        <div style="font-weight:700;">{{ selected_member.goi_dang_su_dung.ten_goi }}</div>
+                        <div style="font-size:13px; color:#666;">Ngày hết hạn: {{ selected_member.ngay_het_han_goi|date:"d/m/Y" }}</div>
+                        <div style="font-size:13px; color:#666;">Điểm tích lũy: <span style="color:#f39c12; font-weight:700;">{{ selected_member.diem_tich_luy }}</span></div>
+                    {% elif selected_member %}
+                        <div style="color:#888;">Hội viên chưa có gói tập hiện tại</div>
+                    {% else %}
+                        <div style="color:#888;">Vui lòng chọn hội viên để xem gói hiện tại</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:16px; align-items:start;">
+                <div>
+                    <label>Gói tập mới</label>
+                    <select name="goi_moi" id="id_goi_moi" onchange="updateThanhToan()">
+                        <option value="">---------</option>
+                        {% for goi in ds_goi_tap %}
+                        <option value="{{ goi.id }}" data-gia="{{ goi.gia_goi|default:0 }}" {% if form_gia_han.goi_moi.value|stringformat:'s' == goi.id|stringformat:'s' %}selected{% endif %}>{{ goi.ten_goi }} - {{ goi.gia_goi }}đ</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>Ngày bắt đầu</label>
+                    {{ form_gia_han.ngay_bat_dau }}
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr; gap:20px; margin-bottom:16px;">
+                <div>
+                    <label>Voucher giảm giá</label>
+                    <select name="voucher" id="id_voucher" onchange="updateThanhToan()">
+                        <option value="">Không áp voucher</option>
+                        {% for voucher in ds_voucher_hop_le %}
+                        <option value="{{ voucher.id }}" data-gia-tri="{{ voucher.gia_tri_giam|default:0 }}" {% if form_gia_han.voucher.value|stringformat:'s' == voucher.id|stringformat:'s' %}selected{% endif %}>{{ voucher.ma_voucher }} - {{ voucher.ten_voucher }} - {{ voucher.gia_tri_giam|floatformat:0 }}đ</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="background:#f8f8f8; border:1px solid #e5e5e5; border-radius:8px; padding:16px; margin-bottom:20px;">
+                <div style="font-weight:700; margin-bottom:12px;">Thông tin thanh toán</div>
+                <div class="payment-line"><span>Giá gói tập:</span><span id="gia_goi_text">0 đ</span></div>
+                <div class="payment-line"><span>Voucher:</span><span id="voucher_text" style="color:#2563eb;">0 đ</span></div>
+                <hr>
+                <div class="payment-line" style="font-weight:700; font-size:18px;"><span>Tổng thanh toán:</span><span id="tong_thanh_toan_text" style="color:#f39c12;">0 đ</span></div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+                <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=gia_han" class="btn-yellow" style="text-decoration:none; background:#ddd;">Hủy</a>
+                <button class="btn-yellow" type="submit" style="background:#22c55e; color:#fff;">Xác nhận gia hạn</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function dinhDangTien(value){
+        value = parseFloat(value || 0);
+        return value.toLocaleString('vi-VN') + ' đ';
+    }
+
+    function updateThanhToan(){
+        const goiSelect = document.getElementById('id_goi_moi');
+        const voucherSelect = document.getElementById('id_voucher');
+
+        let gia = 0;
+        let voucher = 0;
+
+        if(goiSelect && goiSelect.selectedIndex >= 0){
+            gia = parseFloat(goiSelect.options[goiSelect.selectedIndex].dataset.gia || 0);
+        }
+
+        if(voucherSelect && voucherSelect.selectedIndex >= 0){
+            voucher = parseFloat(voucherSelect.options[voucherSelect.selectedIndex].dataset.giaTri || 0);
+        }
+
+        let tong = gia - voucher;
+        if(tong < 0) tong = 0;
+
+        document.getElementById('gia_goi_text').innerText = dinhDangTien(gia);
+        document.getElementById('voucher_text').innerText = dinhDangTien(voucher);
+        document.getElementById('tong_thanh_toan_text').innerText = dinhDangTien(tong);
+    }
+
+    function onChangeHoiVien(){
+        const hoiVienId = document.getElementById('id_hoi_vien').value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', 'gia_han');
+
+        if(hoiVienId){
+            url.searchParams.set('hoi_vien_id', hoiVienId);
+        } else {
+            url.searchParams.delete('hoi_vien_id');
+        }
+
+        window.location.href = url.toString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        updateThanhToan();
+    });
+</script>
+{% endif %}
+
+{% if tab == 'lich_su' %}
+<div class="member-table-card">
+    <h3 class="section-title">Lịch sử tập</h3>
+    <div style="overflow-x:auto;">
+        <table class="member-table">
+            <thead><tr><th>Thời gian</th><th>Hội viên</th><th>Lớp</th><th>Trạng thái</th></tr></thead>
+            <tbody>
+                {% for item in ds_lich_su_tap %}
+                <tr>
+                    <td>{% if item.thoi_gian %}{{ item.thoi_gian|date:"d/m/Y H:i" }}{% else %}-{% endif %}</td>
+                    <td>{{ item.hoi_vien.ho_ten }}</td>
+                    <td>{% if item.lop_tap %}{{ item.lop_tap }}{% else %}-{% endif %}</td>
+                    <td>{{ item.trang_thai }}</td>
+                </tr>
+                {% empty %}<tr><td colspan="4" class="empty-data">Chưa có lịch sử tập.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if tab == 'check_in' %}
+<div class="member-search-box">
+    <form method="get" class="member-search-form">
+        <input type="hidden" name="tab" value="check_in">
+        <input type="text" name="q" placeholder="Tìm kiếm tên, mã, số điện thoại..." value="{{ q|default:'' }}">
+        <button class="btn-yellow" type="submit">Tìm kiếm</button>
+    </form>
+</div>
+<div class="member-table-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+        <h3 class="section-title" style="margin:0;">Danh sách hội viên có lịch tập hôm nay</h3>
+        <div style="font-size:13px;color:#666;">Ngày {{ hom_nay|date:"d/m/Y" }}</div>
+    </div>
+    <div style="overflow-x:auto;">
+        <table class="member-table">
+            <thead><tr><th>Mã hội viên</th><th>Họ tên</th><th>Số điện thoại</th><th>Gói tập</th><th>Lịch hôm nay</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody>
+                {% for item in ds_check_in_hom_nay %}
+                <tr>
+                    <td class="member-code">{{ item.hoi_vien.ma_hoi_vien }}</td>
+                    <td>{{ item.hoi_vien.ho_ten }}</td>
+                    <td>{{ item.hoi_vien.so_dien_thoai }}</td>
+                    <td>{% if item.hoi_vien.goi_dang_su_dung %}{{ item.hoi_vien.goi_dang_su_dung.ten_goi }}{% else %}-{% endif %}</td>
+                    <td><div style="font-weight:600;">{{ item.lich_hoc.get_thu_display }}</div><div style="font-size:12px;color:#777;">{{ item.lich_hoc.gio_bat_dau|time:"H:i" }} - {{ item.lich_hoc.gio_ket_thuc|time:"H:i" }}{% if item.lich_hoc.phong %} | {{ item.lich_hoc.phong }}{% endif %}</div><div style="font-size:12px;color:#777;">HLV: {{ item.lich_hoc.hlv_phu_trach }}</div></td>
+                    <td>{% if item.da_check_in %}<span class="badge bg-success">Đã check-in</span>{% else %}<span class="badge bg-warning">Chưa check-in</span>{% endif %}</td>
+                    <td>{% if item.da_check_in %}<button type="button" class="btn-yellow" style="background:#d1fae5;color:#166534;cursor:default;">Đã check-in</button>{% else %}<form method="post" action="{% url 'khach_hang:check_in_hoi_vien' item.hoi_vien.id %}" style="margin:0;">{% csrf_token %}<input type="hidden" name="next" value="{% url 'khach_hang:danh_sach_hoi_vien' %}?tab=check_in{% if q %}&q={{ q|urlencode }}{% endif %}"><button class="btn-yellow" type="submit" onclick="return confirm('Xác nhận check-in cho hội viên này?')">Check-in</button></form>{% endif %}</td>
+                </tr>
+                {% empty %}<tr><td colspan="7" class="empty-data">Hôm nay chưa có hội viên nào có lịch tập.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

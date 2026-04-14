@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chi tiết hội viên{% endblock %}
+{% block page_title %}QUẢN LÝ KHÁCH HÀNG{% endblock %}
+{% block nav_hoi_vien %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers.css' %}">
+<style>
+    .detail-wrapper{
+        background:#fff;
+        border:1px solid #ececec;
+        border-radius:14px;
+        padding:24px;
+        box-shadow:0 2px 8px rgba(0,0,0,.03);
+    }
+    .detail-title{
+        font-size:24px;
+        font-weight:700;
+        margin-bottom:20px;
+    }
+    .detail-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:16px;
+    }
+    .detail-item{
+        border:1px solid #eee;
+        border-radius:10px;
+        padding:14px;
+        background:#fafafa;
+    }
+    .detail-item label{
+        display:block;
+        font-size:13px;
+        color:#777;
+        margin-bottom:6px;
+    }
+    .detail-item strong{
+        color:#222;
+        font-size:15px;
+    }
+    .full-col{
+        grid-column:1 / -1;
+    }
+    .detail-actions{
+        margin-top:20px;
+        display:flex;
+        justify-content:flex-end;
+        gap:10px;
+    }
+    .btn-back{
+        padding:10px 16px;
+        border-radius:8px;
+        border:1px solid #ddd;
+        background:#f5f5f5;
+        text-decoration:none;
+        color:#333;
+        font-weight:600;
+    }
+    .btn-edit{
+        padding:10px 16px;
+        border-radius:8px;
+        border:none;
+        background:#f4be2c;
+        color:#222;
+        font-weight:700;
+        text-decoration:none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-wrapper">
+    <div class="detail-title">Chi tiết hội viên</div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <label>Mã hội viên</label>
+            <strong>{{ hv.ma_hoi_vien }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Họ tên</label>
+            <strong>{{ hv.ho_ten }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Ngày sinh</label>
+            <strong>{{ hv.ngay_sinh|date:"d/m/Y" }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Giới tính</label>
+            <strong>{{ hv.gioi_tinh }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Số điện thoại</label>
+            <strong>{{ hv.so_dien_thoai }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Email</label>
+            <strong>{{ hv.email }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Gói tập</label>
+            <strong>{% if hv.goi_dang_su_dung %}{{ hv.goi_dang_su_dung.ten_goi }}{% else %}-{% endif %}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Ngày hết hạn</label>
+            <strong>{{ hv.ngay_het_han_goi|date:"d/m/Y" }}</strong>
+        </div>
+
+        <div class="detail-item">
+            <label>Điểm tích lũy</label>
+            <strong>{{ hv.diem_tich_luy }}</strong>
+        </div>
+
+        <div class="detail-item full-col">
+            <label>Tình trạng sức khỏe</label>
+            <strong>{{ hv.tinh_trang_suc_khoe|default:"-" }}</strong>
+        </div>
+
+        <div class="detail-item full-col">
+            <label>Mục tiêu tập luyện</label>
+            <strong>{{ hv.muc_tieu_tap_luyen|default:"-" }}</strong>
+        </div>
+
+        <div class="detail-item full-col">
+            <label>Ghi chú nhân viên</label>
+            <strong>{{ hv.ghi_chu_nhan_vien|default:"-" }}</strong>
+        </div>
+    </div>
+
+    <div class="detail-actions">
+        <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}" class="btn-back">Quay lại</a>
+        <a href="{% url 'khach_hang:sua_hoi_vien' hv.id %}" class="btn-edit">Chỉnh sửa</a>
+    </div>
+</div>
+{% endblock %}

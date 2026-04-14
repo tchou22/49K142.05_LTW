@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}QUẢN LÝ KHÁCH HÀNG{% endblock %}
+{% block nav_hoi_vien %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers.css' %}">
+<style>
+    .member-form-page,
+    .member-form-page *,
+    .member-form-page input,
+    .member-form-page select,
+    .member-form-page textarea,
+    .member-form-page button,
+    .member-form-page a {
+        font-family: 'Inter', sans-serif !important;
+    }
+
+    .form-wrapper{
+        background:#fff;
+        border:1px solid #ececec;
+        border-radius:14px;
+        padding:24px;
+        box-shadow:0 2px 8px rgba(0,0,0,.03);
+    }
+    .form-title{
+        font-size:24px;
+        font-weight:700;
+        margin-bottom:18px;
+    }
+    .form-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:18px;
+    }
+    .form-group{
+        margin-bottom:14px;
+    }
+    .form-group label{
+        display:block;
+        margin-bottom:8px;
+        font-weight:600;
+        font-size:14px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+        width:100%;
+        border:1px solid #ddd;
+        border-radius:8px;
+        padding:10px 12px;
+        font-size:14px;
+        line-height:1.5;
+        box-sizing:border-box;
+    }
+    .full-col{
+        grid-column:1 / -1;
+    }
+    .form-actions{
+        margin-top:20px;
+        display:flex;
+        justify-content:flex-end;
+        gap:10px;
+    }
+    .btn-back{
+        padding:10px 16px;
+        border-radius:8px;
+        border:1px solid #ddd;
+        background:#f5f5f5;
+        text-decoration:none;
+        color:#333;
+        font-weight:600;
+    }
+    .btn-save{
+        padding:10px 16px;
+        border-radius:8px;
+        border:none;
+        background:#f4be2c;
+        color:#222;
+        font-weight:700;
+        cursor:pointer;
+    }
+    .field-hint{
+        display:block;
+        margin-top:6px;
+        font-size:12px;
+        color:#757575;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-wrapper member-form-page">
+    <div class="form-title">{{ title }}</div>
+
+    {% if hv %}
+        <form method="post" action="{% url action_url hv.id %}">
+    {% else %}
+        <form method="post" action="{% url action_url %}">
+    {% endif %}
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Mã hội viên</label>
+                <input
+                    type="text"
+                    name="ma_hoi_vien"
+                    value="{% if form_data %}{{ form_data.ma_hoi_vien|default:'' }}{% elif hv %}{{ hv.ma_hoi_vien|default:'' }}{% else %}{{ ma_hoi_vien_moi|default:'' }}{% endif %}"
+                    readonly
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Họ tên</label>
+                <input
+                    type="text"
+                    name="ho_ten"
+                    value="{% if form_data %}{{ form_data.ho_ten|default:'' }}{% elif hv %}{{ hv.ho_ten|default:'' }}{% endif %}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Ngày sinh</label>
+                <input
+                    type="date"
+                    name="ngay_sinh"
+                    value="{% if form_data %}{{ form_data.ngay_sinh|default:'' }}{% elif hv %}{{ hv.ngay_sinh|date:'Y-m-d' }}{% endif %}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Giới tính</label>
+                <select name="gioi_tinh">
+                    <option value="Nam"
+                        {% if form_data and form_data.gioi_tinh == 'Nam' %}
+                            selected
+                        {% elif hv and hv.gioi_tinh == 'Nam' %}
+                            selected
+                        {% endif %}
+                    >Nam</option>
+
+                    <option value="Nữ"
+                        {% if form_data and form_data.gioi_tinh == 'Nữ' %}
+                            selected
+                        {% elif hv and hv.gioi_tinh == 'Nữ' %}
+                            selected
+                        {% endif %}
+                    >Nữ</option>
+
+                    <option value="Khác"
+                        {% if form_data and form_data.gioi_tinh == 'Khác' %}
+                            selected
+                        {% elif hv and hv.gioi_tinh == 'Khác' %}
+                            selected
+                        {% elif not form_data and not hv %}
+                            selected
+                        {% endif %}
+                    >Khác</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <input
+                    type="text"
+                    class="js-phone-input"
+                    name="so_dien_thoai"
+                    value="{% if form_data %}{{ form_data.so_dien_thoai|default:'' }}{% elif hv %}{{ hv.so_dien_thoai|default:'' }}{% endif %}"
+                    inputmode="numeric"
+                    pattern="\d{10}"
+                    maxlength="10"
+                    title="Số điện thoại phải gồm đúng 10 chữ số"
+                    required
+                >
+                <small class="field-hint">Số điện thoại phải gồm đúng 10 chữ số.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value="{% if form_data %}{{ form_data.email|default:'' }}{% elif hv %}{{ hv.email|default:'' }}{% endif %}"
+                    maxlength="254"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Gói tập</label>
+                <select name="goi_dang_su_dung">
+                    <option value="">Chọn gói tập</option>
+                    {% for goi in ds_goi_tap %}
+                        <option value="{{ goi.id }}"
+                            {% if form_data and form_data.goi_dang_su_dung == goi.id|stringformat:'s' %}
+                                selected
+                            {% elif hv and hv.goi_dang_su_dung and hv.goi_dang_su_dung.id == goi.id %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ goi.ten_goi }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày hết hạn</label>
+                <input
+                    type="date"
+                    name="ngay_het_han_goi"
+                    value="{% if form_data %}{{ form_data.ngay_het_han_goi|default:'' }}{% elif hv %}{{ hv.ngay_het_han_goi|date:'Y-m-d' }}{% endif %}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Điểm tích lũy</label>
+                <input
+                    type="number"
+                    name="diem_tich_luy"
+                    value="{% if form_data %}{{ form_data.diem_tich_luy|default:0 }}{% elif hv %}{{ hv.diem_tich_luy|default:0 }}{% else %}0{% endif %}"
+                >
+            </div>
+
+            <div class="form-group full-col">
+                <label>Tình trạng sức khỏe</label>
+                <textarea name="tinh_trang_suc_khoe" rows="3">{% if form_data %}{{ form_data.tinh_trang_suc_khoe|default:'' }}{% elif hv %}{{ hv.tinh_trang_suc_khoe|default:'' }}{% endif %}</textarea>
+            </div>
+
+            <div class="form-group full-col">
+                <label>Mục tiêu tập luyện</label>
+                <textarea name="muc_tieu_tap_luyen" rows="3">{% if form_data %}{{ form_data.muc_tieu_tap_luyen|default:'' }}{% elif hv %}{{ hv.muc_tieu_tap_luyen|default:'' }}{% endif %}</textarea>
+            </div>
+
+            <div class="form-group full-col">
+                <label>Ghi chú nhân viên</label>
+                <textarea name="ghi_chu_nhan_vien" rows="3">{% if form_data %}{{ form_data.ghi_chu_nhan_vien|default:'' }}{% elif hv %}{{ hv.ghi_chu_nhan_vien|default:'' }}{% endif %}</textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}" class="btn-back">Hủy</a>
+            <button type="submit" class="btn-save">Lưu</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.js-phone-input').forEach(function(input) {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            if (this.value.length === 0 || this.value.length === 10) {
+                this.setCustomValidity('');
+            } else {
+                this.setCustomValidity('Số điện thoại phải gồm đúng 10 chữ số.');
+            }
+        });
+
+        input.addEventListener('invalid', function() {
+            if (!/^\d{10}$/.test(this.value)) {
+                this.setCustomValidity('Số điện thoại phải gồm đúng 10 chữ số.');
+            }
+        });
+    });
+</script>
+{% endblock %}

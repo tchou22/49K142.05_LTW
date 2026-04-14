@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}QUẢN LÝ THÔNG BÁO NHẮC NHỞ{% endblock %}
+{% block content %}
+<div class="page-header">
+</div>
+<div style="display: flex; gap: 24px;">
+    <div style="width: 28%;">
+        <div class="card" style="padding: 16px;">
+            <form method="get">
+                <input type="text" name="q" value="{{ q }}" placeholder="Tìm hội viên..."
+                       style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </form>
+        </div>
+
+        <div style="margin-top: 16px;">
+            {% for hv in ds_hoi_vien %}
+                <a href="?hoi_vien_id={{ hv.id }}{% if q %}&q={{ q }}{% endif %}"
+                   style="display:block; text-decoration:none; color:#000; margin-bottom:12px;">
+                    <div class="card"
+                         style="padding:14px; border-radius:12px;
+                                {% if hoi_vien_duoc_chon and hoi_vien_duoc_chon.id == hv.id %}
+                                    background:#f4c23d;
+                                {% else %}
+                                    background:#fff;
+                                {% endif %}">
+                        <strong>{{ hv.ho_ten }}</strong>
+
+                        {% if hv.dangkylichhoc_set.first and hv.dangkylichhoc_set.first.lich_hoc %}
+                            <div style="font-size:12px; color:#666; margin-top:4px;">
+                                {{ hv.dangkylichhoc_set.first.lich_hoc.khoa_hoc }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </a>
+            {% empty %}
+                <div class="card" style="padding: 16px;">Không có hội viên.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div style="width: 72%;">
+        {% if hoi_vien_duoc_chon %}
+            <div class="card" style="padding: 20px; margin-bottom: 20px; background:#f4c23d; border-radius: 14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:14px;">Hội viên:</div>
+                        <div style="font-size:28px; font-weight:700;">{{ hoi_vien_duoc_chon.ho_ten }}</div>
+                    </div>
+
+                    <div style="text-align:right;">
+                        <div style="font-size:14px;">Lớp học:</div>
+                        {% if dang_ky_gan_nhat and dang_ky_gan_nhat.lich_hoc %}
+                            <div style="font-size:22px; font-weight:700;">{{ dang_ky_gan_nhat.lich_hoc.khoa_hoc }}</div>
+                            <div>
+                                {{ dang_ky_gan_nhat.lich_hoc.gio_bat_dau|time:"H:i" }}
+                                {% if dang_ky_gan_nhat.ngay_hoc %}
+                                    - {{ dang_ky_gan_nhat.ngay_hoc|date:"d/m/Y" }}
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div>Chưa có lịch học</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 20px; margin-bottom: 24px;">
+                <h4>Nội dung thông báo dự kiến</h4>
+1                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="hoi_vien_id" value="{{ hoi_vien_duoc_chon.id }}">
+
+                    <textarea name="noi_dung" rows="4"
+                              style="width:100%; padding:12px; border:1px dashed #6aa1c8; border-radius:10px;">{{ noi_dung_mac_dinh }}</textarea>
+
+                    <div style="margin-top:12px;">
+                        <label>Kênh gửi:</label>
+                        <select name="kenh_gui" style="padding:8px 12px; border-radius:8px; border:1px solid #ddd;">
+                            <option value="web">Thông báo web</option>
+                            <option value="email">Email</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            style="margin-top:16px; width:100%; background:#f4c23d; border:none; padding:14px;
+                                   border-radius:10px; font-weight:700; cursor:pointer;">
+                        GỬI THÔNG BÁO NGAY
+                    </button>
+                </form>
+            </div>
+
+            <div class="card" style="padding: 20px;">
+                <h4>Nhật ký gửi thông báo</h4>
+
+                {% for tb in lich_su_gui %}
+                    <div style="border:1px dashed #6aa1c8; border-radius:10px; padding:12px; margin-bottom:12px;">
+                        <div style="font-size:13px; color:#666; margin-bottom:6px;">
+                            {{ tb.thoi_gian_gui|date:"d/m/Y H:i" }} | {{ tb.get_kenh_gui_display }}
+                        </div>
+                        <div>{{ tb.noi_dung }}</div>
+                    </div>
+                {% empty %}
+                    <p>Chưa có lịch sử gửi thông báo.</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card" style="padding: 20px;">
+                Vui lòng chọn hội viên để gửi thông báo.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

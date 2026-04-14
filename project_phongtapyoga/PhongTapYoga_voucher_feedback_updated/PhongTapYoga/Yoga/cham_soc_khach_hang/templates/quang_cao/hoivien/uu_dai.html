@@ -1,0 +1,37 @@
+{% extends 'base_customer.html' %}
+{% load static %}
+
+{% block page_title %}Ưu đãi dành riêng cho bạn{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/hoi_vien/uu_dai.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="promo-list">
+    {% for qc in danh_sach %}
+    <div class="promo-card">
+        <div class="promo-content">
+            <h3>{{ qc.ten_chuong_trinh }}</h3>
+            <p>{{ qc.noi_dung }}</p>
+            <p><strong>Từ ngày:</strong> {{ qc.ngay_bat_dau|date:"d/m/Y" }}</p>
+            <p><strong>HSD:</strong> {{ qc.ngay_ket_thuc|date:"d/m/Y" }}</p>
+        </div>
+
+        <div class="promo-action">
+            {% if qc.id in uu_dai_da_luu_ids %}
+                <button class="btn-saved" disabled>Đã lưu</button>
+            {% else %}
+                <a href="{% url 'cham_soc_khach_hang:luu_ma_uu_dai' qc.id %}" class="btn-save">
+                    Lưu mã
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <p>Hiện chưa có ưu đãi nào.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

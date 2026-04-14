@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cập nhật tư vấn{% endblock %}
+
+{% block content %}
+<div style="padding: 24px;">
+    <div style="max-width: 820px; margin: 0 auto;">
+        <div style="background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #eee;">
+            <div style="padding: 24px; border-bottom: 1px solid #f1f1f1;">
+                <h2 style="margin: 0; font-size: 30px; font-weight: 700; color: #222; text-align: center;">
+                    Cập nhật tư vấn
+                </h2>
+            </div>
+
+            <form method="post" style="padding: 24px;">
+                {% csrf_token %}
+
+                <div style="background: #fff8e1; border: 1px solid #f4c430; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+                    <div style="font-size: 26px; font-weight: 700; color: #222; margin-bottom: 8px;">
+                        {{ yeu_cau.ho_ten }}
+                    </div>
+                    <div style="color: #666; font-size: 15px;">
+                        {{ yeu_cau.so_dien_thoai }}
+                        {% if yeu_cau.dich_vu_quan_tam %}
+                            &nbsp; • &nbsp; {{ yeu_cau.dich_vu_quan_tam }}
+                        {% endif %}
+                    </div>
+                    {% if yeu_cau.email %}
+                        <div style="color: #888; font-size: 14px; margin-top: 6px;">
+                            {{ yeu_cau.email }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #374151;">
+                        Nội dung yêu cầu
+                    </label>
+                    <div style="padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; line-height: 1.6; color: #444;">
+                        {{ yeu_cau.noi_dung }}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #374151;">
+                        Trạng thái xử lý
+                    </label>
+                    {{ form.trang_thai }}
+                    {% if form.trang_thai.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.trang_thai.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #374151;">
+                        Ghi chú cuộc gọi / Tương tác
+                    </label>
+                    {{ form.ghi_chu_tu_van }}
+                    {% if form.ghi_chu_tu_van.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.ghi_chu_tu_van.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 700; color: #374151;">
+                        Hẹn lịch liên hệ lại
+                    </label>
+                    {{ form.hen_lien_he_lai }}
+                    {% if form.hen_lien_he_lai.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.hen_lien_he_lai.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px;">
+                    <a href="{% url 'cham_soc_khach_hang:danh_sach_yeu_cau_tu_van' %}"
+                       style="display: inline-block; background: #f3f4f6; color: #333; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700;">
+                        Hủy
+                    </a>
+
+                    <button type="submit"
+                            style="background: #f4c430; color: #222; border: none; padding: 12px 22px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                        Lưu cập nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, textarea, select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #f4c430;
+        box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.15);
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}

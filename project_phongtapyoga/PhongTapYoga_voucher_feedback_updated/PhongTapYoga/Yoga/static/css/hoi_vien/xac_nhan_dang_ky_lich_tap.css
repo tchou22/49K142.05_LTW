@@ -1,0 +1,131 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f3f3f3;
+    color: #222;
+}
+
+.confirm-page {
+    padding: 24px;
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.confirm-card {
+    width: 100%;
+    max-width: 760px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #ececec;
+}
+
+.confirm-header {
+    background: #f4b400;
+    padding: 18px 24px;
+}
+
+.confirm-header h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+}
+
+.confirm-body {
+    padding: 24px;
+}
+
+.info-box {
+    background: #fff8df;
+    border: 1px solid #efd889;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+}
+
+.info-box p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.info-box strong {
+    color: #111;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 14px 0;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.schedule-item {
+    background: #f8f8f8;
+    border: 1px solid #e3e3e3;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.schedule-item .title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.schedule-item .time {
+    font-size: 15px;
+    color: #666;
+}
+
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-back,
+.btn-save {
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-back {
+    background: #f2f2f2;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-save {
+    background: #f4b400;
+    color: #111;
+}
+
+.note-box {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #fff6dd;
+    border: 1px solid #f0dd97;
+    color: #7a6000;
+    font-size: 14px;
+}

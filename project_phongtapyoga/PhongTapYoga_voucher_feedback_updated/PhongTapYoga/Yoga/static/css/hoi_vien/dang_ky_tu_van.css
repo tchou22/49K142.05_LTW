@@ -1,0 +1,103 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f3f3f3;
+    color: #222;
+}
+.consult-page {
+    padding: 24px;
+}
+
+.consult-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+}
+
+.consult-left {
+    background: #f9efd2;
+    padding: 36px;
+}
+
+.consult-right {
+    padding: 36px;
+}
+
+.consult-brand {
+    color: #d7a81e;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.consult-left h2 {
+    font-size: 34px;
+    line-height: 1.25;
+    margin-bottom: 18px;
+}
+
+.consult-left p {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.consult-benefits {
+    padding-left: 18px;
+    margin-bottom: 32px;
+}
+
+.consult-benefits li {
+    margin-bottom: 10px;
+}
+
+.consult-hotline {
+    margin-top: 80px;
+    color: #444;
+    font-size: 14px;
+}
+
+.consult-right h3 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.consult-subtitle {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    border: none;
+    background: #f3bf31;
+    color: #111;
+    font-weight: 700;
+    padding: 13px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    opacity: 0.95;
+}

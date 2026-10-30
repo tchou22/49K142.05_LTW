@@ -1,0 +1,108 @@
+{% extends 'base_guest.html' %}
+{% load static %}
+
+{% block title %}Đăng ký tư vấn | Flying Yoga{% endblock %}
+{% block nav_tu_van %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/guest/dang_ky_tu_van.css' %}">
+{% endblock %}
+
+{% block page_title %}{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block content %}
+<div class="consult-page">
+    <!--D17-21: Hiển thị thông báo gửi thành công-->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <!--D23: Chia layout 2 bên: trái – phải-->
+    <div class="consult-card">
+        <!--D25-40: BÊN TRÁI – THÔNG TIN-->
+        <div class="consult-left">
+            <div class="consult-brand">✦ FLYING YOGA</div>
+            <h2>Bắt đầu hành trình thay đổi bản thân ngay hôm nay!</h2>
+            <p>
+                Đăng ký ngay để nhận tư vấn lộ trình tập luyện phù hợp
+                nhất với thể trạng và mục tiêu của bạn.
+            </p>
+
+            <ul class="consult-benefits">
+                <li>Miễn phí 01 buổi tập thử</li>
+                <li>Đo chỉ số Inbody miễn phí</li>
+                <li>Tư vấn 1-1 cùng chuyên gia</li>
+            </ul>
+
+            <div class="consult-hotline">Hotline hỗ trợ <strong>1900 1009</strong></div>
+        </div>
+        <!--D42-92: BÊN PHẢI – FORM NHẬP LIỆU-->
+        <div class="consult-right">
+            <h3>Gửi yêu cầu tư vấn</h3>
+            <p>Vui lòng điền thông tin, chúng tôi sẽ liên hệ lại trong vòng 30 phút.</p>
+
+            <form method="post" class="consult-form" novalidate>
+            <!--D48: Bảo mật chống tấn công-->
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.ho_ten.id_for_label }}">Họ và tên <span>*</span></label>
+                    {{ form.ho_ten }}
+                    {% if form.ho_ten.errors %}
+                        <div class="form-error">{{ form.ho_ten.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.so_dien_thoai.id_for_label }}">Số điện thoại <span>*</span></label>
+                    {{ form.so_dien_thoai }}
+                    <small class="field-hint">Số điện thoại phải gồm đúng 10 chữ số.</small>
+                    {% if form.so_dien_thoai.errors %}
+                        <div class="form-error">{{ form.so_dien_thoai.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="form-error">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.goi_tap_quan_tam.id_for_label }}">Dịch vụ quan tâm</label>
+                    {{ form.goi_tap_quan_tam }}
+                    {% if form.goi_tap_quan_tam.errors %}
+                        <div class="form-error">{{ form.goi_tap_quan_tam.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.noi_dung.id_for_label }}">Nội dung cần tư vấn / Mục tiêu</label>
+                    {{ form.noi_dung }}
+                    {% if form.noi_dung.errors %}
+                        <div class="form-error">{{ form.noi_dung.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="consult-btn">Đăng ký ngay</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+
+<script>
+    document.querySelectorAll('input[name="so_dien_thoai"]').forEach(function(input) {
+        input.setAttribute('inputmode', 'numeric');
+        input.setAttribute('maxlength', '10');
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+    });
+</script>
+{% endblock %}

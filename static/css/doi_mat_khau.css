@@ -1,0 +1,215 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    min-height: 100vh;
+}
+
+.change-password-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.change-password-left {
+    width: 50%;
+    background: #f6bf32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.brand-box {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-circle {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #6f7b55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.logo-circle img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.brand-text h1 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.brand-text p {
+    font-size: 15px;
+    color: #333;
+}
+
+.change-password-right {
+    width: 50%;
+    background: #efefef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.change-password-card {
+    width: 100%;
+    max-width: 450px;
+}
+
+.change-password-card h2 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+}
+
+.alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.alert.success {
+    background: #e7f7ec;
+    color: #1e7e34;
+}
+
+.alert.error {
+    background: #ffe2e2;
+    color: #d62828;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    background: #f8f8f8;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #f6bf32;
+    background: #fff;
+}
+
+.helper-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #999;
+}
+
+.field-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #d62828;
+}
+
+.btn-update {
+    width: 100%;
+    height: 44px;
+    background: #f6bf32;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-update:hover {
+    background: #e8b328;
+}
+
+.btn-cancel {
+    width: 100%;
+    height: 44px;
+    margin-top: 12px;
+    border: 1px solid #d8d8d8;
+    border-radius: 6px;
+    background: #f7f7f7;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background: #ececec;
+}
+
+@media (max-width: 992px) {
+    .change-password-wrapper {
+        flex-direction: column;
+    }
+
+    .change-password-left,
+    .change-password-right {
+        width: 100%;
+        min-height: 50vh;
+    }
+
+    .brand-box {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .brand-text h1 {
+        font-size: 26px;
+    }
+
+    .change-password-card h2 {
+        font-size: 26px;
+    }
+}

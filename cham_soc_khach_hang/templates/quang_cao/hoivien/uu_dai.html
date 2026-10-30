@@ -1,0 +1,67 @@
+{% extends 'base_customer.html' %}
+{% load static %}
+
+{% block page_title %}Ưu đãi dành riêng cho bạn{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block nav_uu_dai %}active{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/hoi_vien/uu_dai.css' %}">
+{% endblock %}
+{% block content %}
+
+<div style="margin-bottom:18px; padding:14px 18px; border-radius:12px; background:#fff7d6; color:#8a6200; border:1px solid #f3d36a; font-weight:600;">
+    Chỉ các mục có nhãn <strong>Voucher</strong> mới tạo mã giảm giá để áp dụng ở màn <strong>Gia hạn/Đổi gói</strong>. Các mục gắn nhãn <strong>Ưu đãi</strong> chỉ là chương trình khuyến mãi chung của phòng tập.
+</div>
+
+<div class="promo-list">
+    {% for qc in danh_sach %}
+    <div class="promo-card">
+        <div class="promo-content">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+                {% if qc.la_voucher %}
+                    <span style="background:#eef2ff; color:#4338ca; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Voucher</span>
+                {% else %}
+                    <span style="background:#f1f5f9; color:#334155; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Ưu đãi</span>
+                {% endif %}
+            </div>
+
+            <h3>{{ qc.ten_chuong_trinh }}</h3>
+            <p>{{ qc.noi_dung }}</p>
+
+            {% if qc.la_voucher %}
+            <div style="margin:12px 0; padding:12px 14px; border:1px dashed #cbd5e1; border-radius:10px; background:#f8fafc;">
+                <p style="margin:0 0 6px 0;"><strong>Mã ưu đãi:</strong> {{ qc.ma_uu_dai|default:'-' }}</p>
+                <p style="margin:0;"><strong>Giá trị giảm:</strong> {{ qc.gia_tri_giam|floatformat:0 }} đ</p>
+                {% if qc.voucher_da_luu %}
+                    <p style="margin:8px 0 0 0; color:#166534;"><strong>Mã đã cấp cho bạn:</strong> {{ qc.voucher_da_luu.ma_voucher }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="promo-meta">
+                <p><strong>Từ ngày:</strong> {{ qc.ngay_bat_dau|date:"d/m/Y" }}</p>
+                <p><strong>HSD:</strong> {{ qc.ngay_ket_thuc|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+
+        <div class="promo-action">
+            {% if qc.la_voucher %}
+                {% if qc.da_luu %}
+                    <button class="btn-saved" disabled>Đã lưu</button>
+                {% else %}
+                    <a href="{% url 'cham_soc_khach_hang:luu_ma_uu_dai' qc.id %}" class="btn-save">
+                        Lưu mã
+                    </a>
+                {% endif %}
+            {% else %}
+                <button class="btn-saved" disabled style="background:#f3f4f6; color:#6b7280;">Ưu đãi chung</button>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <p>Hiện chưa có ưu đãi nào.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

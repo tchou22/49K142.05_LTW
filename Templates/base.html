@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flying Yoga{% endblock %}</title>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <img src="{% static 'images/logo.png' %}" alt="Flying Yoga Logo">
+            </div>
+            <h2>FLYING YOGA</h2>
+        </div>
+
+        <ul class="nav-menu">
+            <li>
+                <a href="{% url 'bao_cao:tong_quan' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'tong_quan' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span>Tổng quan</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'khach_hang:danh_sach_khach_hang' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_khach_hang' or request.resolver_match.url_name == 'them_khach_hang' or request.resolver_match.url_name == 'sua_khach_hang' or request.resolver_match.url_name == 'xoa_khach_hang' %}active{% endif %}">
+                    <i class="far fa-user"></i>
+                    <span>Khách hàng</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'khach_hang:danh_sach_hoi_vien' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_hoi_vien' or request.resolver_match.url_name == 'them_hoi_vien' or request.resolver_match.url_name == 'sua_hoi_vien' or request.resolver_match.url_name == 'xoa_hoi_vien' or request.resolver_match.url_name == 'chi_tiet_hoi_vien' or request.resolver_match.url_name == 'gia_han_doi_goi' or request.resolver_match.url_name == 'lich_su_tap_luyen' or request.resolver_match.url_name == 'check_in_hoi_vien' %}active{% endif %}">
+                    <i class="fas fa-user-check"></i>
+                    <span>Hội viên</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'goi_tap:goi_tap' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'goi_tap' or request.resolver_match.url_name == 'them_goi_tap' or request.resolver_match.url_name == 'sua_goi_tap' or request.resolver_match.url_name == 'xoa_goi_tap' or request.resolver_match.url_name == 'dang_ky_goi_tap' %}active{% endif %}">
+                    <i class="fas fa-cube"></i>
+                    <span>Gói tập</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'lich_tap:danh_sach_lich_hoc' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_lich_hoc' or request.resolver_match.url_name == 'them_lich_hoc' or request.resolver_match.url_name == 'sua_lich_hoc' or request.resolver_match.url_name == 'xoa_lich_hoc' or request.resolver_match.url_name == 'dang_ky_lich_hoc' %}active{% endif %}">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>Lịch tập</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'tich_diem:quan_ly_diem' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'quan_ly_diem' or request.resolver_match.url_name == 'doi_diem' %}active{% endif %}">
+                    <i class="fa-solid fa-ticket"></i>
+                    <span>Điểm tích lũy</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'cham_soc_khach_hang:danh_sach_quang_cao' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_quang_cao' or request.resolver_match.url_name == 'them_quang_cao' or request.resolver_match.url_name == 'xem_quang_cao' or request.resolver_match.url_name == 'xoa_quang_cao' or request.resolver_match.url_name == 'gui_quang_cao' %}active{% endif %}">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Quảng cáo</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'thong_bao:quan_ly_thong_bao' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'quan_ly_thong_bao' %}active{% endif %}">
+                    <i class="far fa-bell"></i>
+                    <span>Thông báo</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'cham_soc_khach_hang:danh_sach_yeu_cau_tu_van' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_yeu_cau_tu_van' or request.resolver_match.url_name == 'cap_nhat_yeu_cau_tu_van' or request.resolver_match.url_name == 'tao_yeu_cau_tu_van' %}active{% endif %}">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Tư vấn</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'cham_soc_khach_hang:danh_sach_phan_hoi_khieu_nai' %}"
+                   class="nav-link {% if request.resolver_match.url_name == 'danh_sach_phan_hoi_khieu_nai' or request.resolver_match.url_name == 'cap_nhat_phan_hoi_khieu_nai' or request.resolver_match.url_name == 'tao_phan_hoi_khieu_nai' %}active{% endif %}">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Phản hồi</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="logout-section">
+            <a href="{% url 'tai_khoan:dang_xuat' %}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng xuất</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header class="header">
+            <h1>{% block page_title %}FLYING YOGA{% endblock %}</h1>
+
+            <div class="user-info">
+                {% if request.user.is_authenticated %}
+                    <div class="name">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                        {% if request.user.role %}
+                            ({{ request.user.get_role_display }})
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'tai_khoan:doi_mat_khau' %}" class="change-pwd">Đổi mật khẩu</a>
+                {% else %}
+                    <div class="name">Khách</div>
+                    <a href="{% url 'tai_khoan:dang_nhap' %}" class="change-pwd">Đăng nhập</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="page-content">
+
+            {% if messages %}
+                <div style="margin-bottom: 20px;">
+                    {% for message in messages %}
+                        <div style="
+                            padding: 14px 18px;
+                            border-radius: 10px;
+                            margin-bottom: 10px;
+                            font-size: 16px;
+                            line-height: 1.5;
+                            {% if message.tags == 'success' %}
+                                background: #e6f4ea;
+                                color: #2e7d32;
+                                border: 1px solid #c8e6c9;
+                            {% elif message.tags == 'error' %}
+                                background: #fdecea;
+                                color: #c62828;
+                                border: 1px solid #f5c6cb;
+                            {% elif message.tags == 'warning' %}
+                                background: #fff8e1;
+                                color: #ef6c00;
+                                border: 1px solid #ffe082;
+                            {% else %}
+                                background: #e3f2fd;
+                                color: #1565c0;
+                                border: 1px solid #90caf9;
+                            {% endif %}
+                        ">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+    </main>
+</div>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

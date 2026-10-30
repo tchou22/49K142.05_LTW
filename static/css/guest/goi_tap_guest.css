@@ -1,0 +1,130 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f3f3f3;
+    color: #222;
+}
+.packages-page {
+    padding-bottom: 24px;
+}
+
+/* Phần Tiêu đề trang */
+.section-heading {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0; /* Thêm đường kẻ ngang mờ giống trong ảnh */
+}
+
+.section-heading h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.section-heading p {
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.5;
+}
+
+/* Lưới chứa các gói tập */
+.package-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px; /* Tăng khoảng cách giữa các thẻ cho thoáng giống ảnh */
+    margin-top: 30px;
+}
+
+/* Thẻ gói tập */
+.package-card {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 40px 20px; /* Tăng padding trên dưới để thẻ dài ra */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ nhàng hơn */
+    text-align: center; /* Căn giữa toàn bộ chữ trong thẻ */
+    transition: all 0.3s ease;
+}
+
+.package-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề gói (Gói Cơ Bản, Gói VIP...) */
+.package-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+/* Giá tiền */
+.package-price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fbbc05; /* Màu vàng cam giống hệt trong ảnh */
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+/* Danh sách tính năng */
+.package-features {
+    list-style: none; /* Bỏ dấu chấm mặc định của thẻ ul */
+    margin: 0;
+    padding: 0;
+}
+
+.package-features li {
+    font-size: 13px;
+    color: #333333;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+/* XÓA BỎ dấu chấm màu vàng (bullet) ở code cũ */
+.package-features li::before {
+    content: none;
+}
+
+/* ẨN các thành phần không xuất hiện trong ảnh thiết kế (nhưng vẫn giữ nguyên trong HTML) */
+.package-badge,
+.package-meta,
+.package-btn {
+    display: none;
+}
+
+/* Trạng thái không có gói tập */
+.empty-package {
+    grid-column: 1 / -1;
+    background: #fff;
+    border: 1px dashed #d9d9d9;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    color: #777;
+    font-size: 15px;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 1100px) {
+    .package-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .package-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading h2 {
+        font-size: 22px;
+    }
+
+    .package-card {
+        padding: 30px 20px;
+    }
+}

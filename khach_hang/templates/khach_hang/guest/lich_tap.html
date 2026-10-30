@@ -1,0 +1,61 @@
+{% extends 'base_guest.html' %}
+{% load static %}
+
+{% block title %}Lịch tập | Flying Yoga{% endblock %}
+{% block nav_lich_tap %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/guest/lich_tap_guest.css' %}">
+{% endblock %}
+
+{% block page_title %}Lịch Tập Của Bạn{% endblock %}
+{% block page_subtitle %}Các buổi tập thuộc gói tập bạn đã đăng ký{% endblock %}
+
+{% block content %}
+<div class="schedule-page">
+    <form method="get" class="schedule-filter">
+        <select name="goi_tap">
+            <option value="">Tất cả gói tập</option>
+            {% for goi in ds_goi_tap %}
+                <option value="{{ goi.id }}" {% if goi_tap_id == goi.id|stringformat:"s" %}selected{% endif %}>
+                    {{ goi.ten_goi }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="filter-btn">Tìm kiếm</button>
+    </form>
+
+    {% for item in grouped_data %}
+        <div class="schedule-package">
+            <div class="schedule-package-header">
+                <h3>Gói tập: {{ item.goi.ten_goi }}</h3>
+
+            </div>
+            <div class="schedule-week-grid">
+                {% for col in item.columns %}
+                    <div class="day-column">
+                        <div class="day-title">{{ col.label }}</div>
+
+                        <div class="day-body">
+                            {% for lich in col.items %}
+                                <div class="schedule-card">
+                                    <div class="schedule-name">{{ lich.khoa_hoc }}</div>
+                                    <div class="schedule-time">
+                                        {{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}
+                                    </div>
+                                </div>
+                            {% empty %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-schedule">
+            Hiện chưa có lịch tập.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

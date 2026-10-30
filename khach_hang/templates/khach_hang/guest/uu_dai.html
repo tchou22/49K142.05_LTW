@@ -1,0 +1,35 @@
+{% extends 'base_guest.html' %}
+{% load static %}
+
+{% block title %}Ưu đãi | Flying Yoga{% endblock %}
+{% block nav_uu_dai %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/guest/uu_dai.css' %}">
+{% endblock %}
+
+{% block page_title %}Ưu đãi dành riêng cho bạn{% endblock %}
+{% block page_subtitle %}Khám phá các chương trình ưu đãi hấp dẫn đang được áp dụng tại Flying Yoga{% endblock %}
+
+{% block content %}
+<div class="offers-page">
+    <div class="offer-grid">
+        {% for uu_dai in ds_uu_dai %}
+            <div class="offer-card">
+                <div class="offer-card-inner">
+                    <h3>{{ uu_dai.ten_chuong_trinh }}</h3>
+                    <p>{{ uu_dai.noi_dung }}</p>
+
+                    <div class="offer-expiry">
+                        HSD: {{ uu_dai.ngay_ket_thuc|date:"d/m/Y" }}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-offer">
+                Hiện tại chưa có ưu đãi mới.
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

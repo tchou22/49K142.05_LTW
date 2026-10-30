@@ -1,0 +1,259 @@
+.report-page {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 2px 0 18px;
+}
+
+.report-filter-box {
+    background: #f8f8f8;
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    padding: 14px 16px;
+}
+
+.report-filter-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.report-filter-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.report-filter-left label {
+    font-size: 13px;
+    color: #8a8a8a;
+    font-weight: 600;
+}
+
+.report-select {
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    color: #555;
+    min-width: 90px;
+}
+
+.btn-apply-report {
+    height: 30px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 4px;
+    background: #f4c23d;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.report-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.report-tab-btn {
+    border: none;
+    background: transparent;
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.report-tab-btn.active {
+    background: #f8df8a;
+    color: #222;
+}
+
+.report-tab-content {
+    display: none;
+}
+
+.report-tab-content.active {
+    display: block;
+}
+
+.report-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 10px 0 14px;
+}
+
+.report-stat-card {
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    background: #fff;
+    padding: 10px 12px;
+    min-height: 72px;
+}
+
+.report-stat-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #b1b1b1;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.report-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #3a3a3a;
+    line-height: 1;
+}
+
+.report-stat-value.blue {
+    color: #5a7edc;
+}
+
+.report-stat-value.red {
+    color: #ef6b61;
+}
+
+.report-table-box {
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table thead th {
+    background: #f9f9f9;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ececec;
+}
+
+.report-table tbody td {
+    font-size: 15px;
+    color: #4a4a4a;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.risk-section {
+    margin-top: 14px;
+}
+
+.risk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #3c3c3c;
+}
+
+.risk-total {
+    font-size: 10px;
+    color: #f07b75;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.risk-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.risk-item {
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    background: #fff;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.risk-info strong {
+    display: block;
+    font-size: 12px;
+    color: #444;
+    margin-bottom: 4px;
+}
+
+.risk-info span {
+    font-size: 11px;
+    color: #f07b75;
+}
+
+.risk-btn {
+    border: none;
+    background: #f5f5f5;
+    color: #777;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.risk-empty {
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    background: #fff;
+    padding: 14px;
+    font-size: 12px;
+    color: #666;
+}
+
+.report-export-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.report-export-btn {
+    background: #f4c23d;
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 6px;
+}
+
+@media (max-width: 992px) {
+    .report-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-list {
+        grid-template-columns: 1fr;
+    }
+}

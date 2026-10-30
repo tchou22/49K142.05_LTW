@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Quản lý thông báo{% endblock %}
+{% block page_title %}QUẢN LÝ THÔNG BÁO{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 24px;">
+    <form method="get" style="margin-bottom:20px;">
+        <input type="text" name="q" value="{{ q }}" placeholder="Tìm hội viên..."
+               style="padding:10px 14px; width:320px; border:1px solid #ccc; border-radius:8px;">
+        <button type="submit" style="padding:10px 16px; background:#d4a62a; border:none; border-radius:8px;">
+            Tìm
+        </button>
+    </form>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px;">
+        <div>
+            <h3>Danh sách hội viên</h3>
+            <div style="background:#fff; border-radius:12px; padding:16px;">
+                {% for hv in ds_hoi_vien %}
+                    <div style="border-bottom:1px solid #eee; padding:12px 0;">
+                        <strong>{{ hv.ho_ten }}</strong><br>
+                        <small>{{ hv.so_dien_thoai }} - {{ hv.email }}</small>
+
+                        <form method="post" action="{% url 'thong_bao:gui_thong_bao' hv.id %}" style="margin-top:10px;">
+                            {% csrf_token %}
+                            <input type="text" name="tieu_de" placeholder="Tiêu đề"
+                                   style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
+                            <textarea name="noi_dung" placeholder="Nhập nội dung thông báo..."
+                                      style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;"></textarea>
+
+                            <select name="kenh_gui" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
+                                <option value="web">Thông báo web</option>
+                                <option value="email">Email</option>
+                            </select>
+
+                            <button type="submit"
+                                    style="padding:10px 14px; background:#d4a62a; border:none; border-radius:8px;">
+                                Gửi thông báo
+                            </button>
+                        </form>
+                    </div>
+                {% empty %}
+                    <p>Không có hội viên.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <h3>Lịch sử gửi gần đây</h3>
+            <div style="background:#fff; border-radius:12px; padding:16px;">
+                {% for tb in lich_su %}
+                    <div style="border-bottom:1px solid #eee; padding:12px 0;">
+                        <strong>{{ tb.hoi_vien.ho_ten }}</strong><br>
+                        <small>{{ tb.tieu_de }}</small><br>
+                        <span>{{ tb.noi_dung }}</span><br>
+                        <small style="color:#888;">{{ tb.thoi_gian_gui }}</small>
+                    </div>
+                {% empty %}
+                    <p>Chưa có thông báo nào.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

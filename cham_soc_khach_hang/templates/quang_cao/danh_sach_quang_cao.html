@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quản lý chương trình quảng cáo{% endblock %}
+{% block page_title %}Quản lý chương trình quảng cáo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quang_cao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card" style="padding: 20px; margin-bottom: 24px;">
+    <form method="get" style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <input type="text" name="q" value="{{ q }}" placeholder="Nhập từ khóa tìm kiếm chương trình"
+               class="form-control" style="flex: 1; min-width: 260px;">
+
+        <select name="trang_thai" class="form-control" style="width: 200px;">
+            <option value="">Tất cả trạng thái</option>
+            <option value="dang_ap_dung" {% if trang_thai == 'dang_ap_dung' %}selected{% endif %}>Đang áp dụng</option>
+            <option value="sap_dien_ra" {% if trang_thai == 'sap_dien_ra' %}selected{% endif %}>Sắp diễn ra</option>
+            <option value="da_het_han" {% if trang_thai == 'da_het_han' %}selected{% endif %}>Đã hết hạn</option>
+        </select>
+
+        <button type="submit" class="btn btn-warning">Tìm kiếm</button>
+        <a href="{% url 'cham_soc_khach_hang:them_quang_cao' %}" class="btn btn-warning">Thêm mới</a>
+    </form>
+</div>
+
+<h3 style="margin-bottom: 16px;">Danh sách chương trình quảng cáo</h3>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+    {% for qc in danh_sach %}
+        <div class="card" style="padding: 20px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; gap: 10px;">
+                <div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+                        {% if qc.la_voucher %}
+                            <span style="background:#eef2ff; color:#4338ca; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Voucher</span>
+                        {% else %}
+                            <span style="background:#f1f5f9; color:#334155; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Quảng cáo</span>
+                        {% endif %}
+                        {% if qc.da_gui %}
+                            <span style="background:#dcfce7; color:#166534; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Đã gửi</span>
+                        {% else %}
+                            <span style="background:#fee2e2; color:#b91c1c; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:700;">Chưa gửi</span>
+                        {% endif %}
+                    </div>
+                    <h4 style="margin: 0 0 8px 0;">{{ qc.ten_chuong_trinh }}</h4>
+                    <p style="margin: 0 0 12px 0; color: #555;">{{ qc.noi_dung }}</p>
+                </div>
+
+                {% if qc.trang_thai == 'dang_ap_dung' %}
+                    <span style="background: #dff5e3; color: #2e9b4b; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                        Đang áp dụng
+                    </span>
+                {% elif qc.trang_thai == 'sap_dien_ra' %}
+                    <span style="background: #fff3cd; color: #b78103; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                        Sắp diễn ra
+                    </span>
+                {% else %}
+                    <span style="background: #fde2e2; color: #d9534f; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                        Đã hết hạn
+                    </span>
+                {% endif %}
+            </div>
+
+            <p style="margin: 0 0 10px 0;">
+                <strong>Thời gian áp dụng:</strong><br>
+                {{ qc.ngay_bat_dau|date:"d/m/Y" }} - {{ qc.ngay_ket_thuc|date:"d/m/Y" }}
+            </p>
+
+            {% if qc.la_voucher %}
+            <div style="margin:0 0 16px 0; padding:12px 14px; border:1px dashed #cbd5e1; border-radius:10px; background:#f8fafc;">
+                <div><strong>Mã ưu đãi:</strong> {{ qc.ma_uu_dai|default:'-' }}</div>
+                <div><strong>Giá trị giảm:</strong> {{ qc.gia_tri_giam|floatformat:0 }} đ</div>
+            </div>
+            {% endif %}
+
+            <div style="display: flex; gap: 12px; flex-wrap:wrap;">
+                <a href="{% url 'cham_soc_khach_hang:gui_quang_cao' qc.id %}" class="btn btn-light-blue">{% if qc.da_gui %}Gửi lại{% else %}Gửi{% endif %}</a>
+                <a href="{% url 'cham_soc_khach_hang:xem_quang_cao' qc.id %}" class="btn btn-light-gray">Xem</a>
+                <a href="{% url 'cham_soc_khach_hang:xoa_quang_cao' qc.id %}" class="btn btn-light-red"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa chương trình này không?')">Xóa</a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="card" style="padding: 20px;">
+            Không có chương trình quảng cáo nào.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

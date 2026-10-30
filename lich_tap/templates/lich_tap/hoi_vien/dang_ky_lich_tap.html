@@ -1,0 +1,218 @@
+{% extends 'base_customer.html' %}
+{% load static %}
+{% block page_title %}Lịch Tập Của Bạn{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block nav_lich_tap %}active{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/hoi_vien/lich_tap.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="schedule-page">
+
+
+    <div class="filter-box">
+        <form class="filter-form">
+            <select disabled>
+                <option>{{ goi_tap.ten_goi }}</option>
+            </select>
+            <button type="button" class="btn-search">Tìm kiếm</button>
+        </form>
+    </div>
+
+    <form method="post" action="{% url 'lich_tap:xac_nhan_dang_ky_lich' %}" id="dangKyLichForm" data-existing-count="{{ ds_da_dang_ky|length }}">
+    {% csrf_token %}
+        <div class="goi-card">
+            <div class="goi-header">
+                <div class="goi-title">
+                    <h3>Gói tập: {{ goi_tap.ten_goi }}</h3>
+                </div>
+                <button type="submit" class="btn-confirm">Xác nhận đăng ký</button>
+            </div>
+
+            <div class="week-grid">
+                <div class="day-column">
+                    <h4>Thứ 2</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '2' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% empty %}
+                        <div class="empty-slot">Không có lịch</div>
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Thứ 3</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '3' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Thứ 4</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '4' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Thứ 5</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '5' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Thứ 6</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '6' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Thứ 7</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == '7' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="day-column">
+                    <h4>Chủ nhật</h4>
+                    {% for lich in form.fields.lich_hocs.queryset %}
+                        {% if lich.thu == 'CN' %}
+                            <label class="slot-label">
+                                <input type="checkbox" name="lich_hocs" value="{{ lich.id }}"
+                                    {% for item in ds_da_dang_ky %}
+                                        {% if item.lich_hoc.id == lich.id %}checked disabled{% endif %}
+                                    {% endfor %}>
+                                <div class="slot-card {% for item in ds_da_dang_ky %}{% if item.lich_hoc.id == lich.id %}disabled{% endif %}{% endfor %}">
+                                    <strong>{{ lich.khoa_hoc }}</strong>
+                                    <span>{{ lich.gio_bat_dau|time:"H:i" }} - {{ lich.gio_ket_thuc|time:"H:i" }}</span>
+                                </div>
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="registered-box">
+        <h3>Các lịch bạn đã đăng ký</h3>
+        {% if ds_da_dang_ky %}
+            <ul>
+                {% for item in ds_da_dang_ky %}
+                    <li>
+                        Thứ: {{ item.lich_hoc.thu }} -
+                        {{ item.lich_hoc.goi_tap }} -
+                        {{ item.lich_hoc.gio_bat_dau|time:"H:i" }} đến {{ item.lich_hoc.gio_ket_thuc|time:"H:i" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Bạn chưa đăng ký buổi tập nào.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('dangKyLichForm');
+    const checkboxes = form.querySelectorAll('input[name="lich_hocs"]:not(:disabled)');
+    const existingCount = parseInt(form.dataset.existingCount || '0', 10);
+
+    function checkedCount() {
+        return form.querySelectorAll('input[name="lich_hocs"]:checked:not(:disabled)').length;
+    }
+
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            const checked = checkedCount();
+            if (checked > 3 || existingCount + checked > 3) {
+                this.checked = false;
+                alert('Bạn chỉ được chọn tối đa 3 buổi/tuần cho gói tập này.');
+            }
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        const checked = checkedCount();
+        if (checked === 0) {
+            e.preventDefault();
+            alert('Vui lòng chọn ít nhất 1 buổi tập để tiếp tục.');
+            return;
+        }
+
+        if (existingCount + checked > 3) {
+            e.preventDefault();
+            alert('Bạn đang có sẵn ' + existingCount + ' buổi đã đăng ký. Không thể chọn quá 3 buổi/tuần.');
+        }
+    });
+});
+</script>
+{% endblock %}

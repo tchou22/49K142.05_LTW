@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gửi yêu cầu tư vấn<script>
+    document.querySelectorAll('input[name="so_dien_thoai"]').forEach(function(input) {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 24px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div style="background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h2 style="margin-bottom: 10px; color: #222; font-size: 28px; font-weight: 700;">
+                Gửi yêu cầu tư vấn
+            </h2>
+            <p style="margin-bottom: 24px; color: #666;">
+                Vui lòng để lại thông tin, nhân viên sẽ liên hệ tư vấn cho bạn sớm nhất.
+            </p>
+            <form method="post">
+                {% csrf_token %}
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Họ và tên</label>
+                    {{ form.ho_ten }}
+                    {% if form.ho_ten.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.ho_ten.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Số điện thoại</label>
+                    {{ form.so_dien_thoai }}
+                    <small style="display:block; margin-top:6px; color:#6b7280; font-size:12px;">Số điện thoại phải gồm đúng 10 chữ số.</small>
+                    {% if form.so_dien_thoai.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.so_dien_thoai.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Dịch vụ quan tâm</label>
+                    {{ form.dich_vu_quan_tam }}
+                    {% if form.dich_vu_quan_tam.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.dich_vu_quan_tam.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Nội dung cần tư vấn</label>
+                    {{ form.noi_dung }}
+                    {% if form.noi_dung.errors %}
+                        <div style="color: red; margin-top: 6px;">{{ form.noi_dung.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit"
+                        style="background: #f4c430; color: #222; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+                    Gửi yêu cầu
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, textarea, select {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 14px;
+        border: 1px solid #d9dde3;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        min-height: 112px;
+        resize: vertical;
+    }
+
+    button[type="submit"] {
+        min-height: 44px;
+        border-radius: 10px !important;
+        font-size: 14px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #f4c430;
+        box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.15);
+    }
+</style>
+<script>
+    document.querySelectorAll('input[name="so_dien_thoai"]').forEach(function(input) {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+    });
+</script>
+{% endblock %}

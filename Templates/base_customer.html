@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flying Yoga{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/hoi_vien/base_customer.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="customer-layout">
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="brand-wrap">
+                        <img src="{% static 'images/logo.png' %}" alt="Flying Yoga" class="brand-logo">
+                        <div class="brand-text">
+                            <h2>FLYING YOGA</h2>
+                            <p>KH: {{ request.user.get_full_name|default:request.user.username }}</p>
+                        </div>
+                    </div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="{% url 'khach_hang:gioi_thieu_hoi_vien' %}" class="{% block nav_gioi_thieu %}{% endblock %}">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Giới thiệu</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'khach_hang:goi_tap_hoi_vien' %}" class="{% block nav_goi_tap %}{% endblock %}">
+                            <i class="fa-solid fa-cube"></i>
+                            <span>Gói tập</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'lich_tap:dang_ky_lich_hoc_cua_toi' %}" class="{% block nav_lich_tap %}{% endblock %}">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span>Lịch tập</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'cham_soc_khach_hang:danh_sach_uu_dai_hoi_vien' %}" class="{% block nav_uu_dai %}{% endblock %}">
+                            <i class="fa-regular fa-rectangle-list"></i>
+                            <span>Ưu đãi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'cham_soc_khach_hang:dang_ky_tu_van_hoi_vien' %}" class="{% block nav_dang_ky_tu_van %}{% endblock %}">
+                            <i class="fa-solid fa-user-check"></i>
+                            <span>Đăng kí tư vấn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'cham_soc_khach_hang:danh_gia_khieu_nai' %}" class="{% block nav_khieu_nai %}{% endblock %}">
+                            <i class="fa-regular fa-envelope-open"></i>
+                            <span>Đánh giá, khiếu nại</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'tich_diem:diem_tich_luy_hoi_vien' %}" class="{% block nav_tich_diem %}{% endblock %}">
+                            <i class="fa-solid fa-tag"></i>
+                            <span>Điểm tích lũy</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-bottom">
+                <a href="{% url 'tai_khoan:dang_xuat' %}" class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-text">
+                    <h1>{% block page_title %}Chào Mừng Đến Với Flying Yoga{% endblock %}</h1>
+                    {% block page_subtitle %}
+                        <p>Trải nghiệm yoga bay - Nơi cơ thể và tâm hồn được tự do bay bổng</p>
+                    {% endblock %}
+                </div>
+                <div class="topbar-actions">
+                    <div class="notification-wrapper" style="position: relative;">
+                        <button type="button" class="notification-btn" id="notificationToggle">
+                            <i class="fa-regular fa-bell"></i>
+                            {% if so_thong_bao_chua_doc > 0 %}
+                                <span class="notification-badge">{{ so_thong_bao_chua_doc }}</span>
+                            {% endif %}
+                        </button>
+
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h3>Thông báo</h3>
+                            </div>
+                            <div class="notification-tabs">
+                                <button type="button" class="tab-btn active" data-filter="all">Tất cả</button>
+                                <button type="button" class="tab-btn" data-filter="unread">Chưa đọc</button>
+                            </div>
+                            <div class="notification-list">
+                                {% for tb in ds_thong_bao_dropdown %}
+                                    <a href="{% url 'thong_bao:mo_thong_bao' tb.id %}" class="notification-item {% if not tb.da_doc %}unread{% endif %}" style="display:flex; text-decoration:none; color:inherit;">
+                                        <div class="notification-dot {% if tb.da_doc %}read{% endif %}"></div>
+                                        <div class="notification-content">
+                                            <p>
+                                                {% if tb.tieu_de %}
+                                                    <strong>{{ tb.tieu_de }}</strong>
+                                                {% endif %}
+                                                {{ tb.noi_dung }}
+                                            </p>
+                                            <span>{{ tb.thoi_gian_gui|date:"H:i d/m/Y" }}</span>
+                                        </div>
+                                    </a>
+                                {% empty %}
+                                    <div class="notification-item">
+                                        <div class="notification-content">
+                                            <p>Không có thông báo</p>
+                                            <span>Hệ thống chưa có thông báo nào</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div style="padding: 14px 18px; border-top: 1px solid #f1f1f1; text-align: center;">
+                                <a href="{% url 'thong_bao:danh_sach_thong_bao' %}?loc=tat_ca" style="text-decoration:none; font-weight:700; color:#c58b00;">
+                                    Xem tất cả thông báo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if messages %}
+                <div class="message-wrapper">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="content-box">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('notificationToggle');
+            const dropdown = document.getElementById('notificationDropdown');
+            const tabs = document.querySelectorAll('.tab-btn');
+            const items = document.querySelectorAll('.notification-item');
+
+            if (!toggleBtn || !dropdown) return;
+
+            toggleBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+
+            dropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            document.addEventListener('click', function () {
+                dropdown.classList.remove('show');
+            });
+
+            tabs.forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    // Reset active tabs
+                    tabs.forEach(function (t) {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+
+                    // Filter items
+                    const filter = this.dataset.filter;
+                    items.forEach(function (item) {
+                        if (filter === 'all') {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = item.classList.contains('unread') ? 'flex' : 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    {% include 'chatbot/widget.html' %}
+</body>
+</html>

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/them_lich_tap.css' %}">
+
+<div class="lich-page">
+    <div class="lich-card">
+        <div class="lich-card-header">
+            <h2>Thêm lịch tập theo tuần lặp</h2>
+        </div>
+
+        <form method="post" class="lich-form">
+            {% csrf_token %}
+
+            <div class="form-group full-width">
+                <label>Khóa học <span>*</span></label>
+                {{ form.goi_tap }}
+                {% if form.goi_tap.errors %}
+                    <div class="form-error">{{ form.goi_tap.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+           <div class="form-group full-width">
+    <label>Chọn nhiều thứ trong tuần <span>*</span></label>
+
+    <div class="thu-list">
+            {% for value, label in form.fields.thu.choices %}
+                {% if value %}
+                    <label class="thu-item">
+                        <input type="checkbox" name="thu" value="{{ value }}"
+                            {% if form.thu.value and value in form.thu.value %}checked{% endif %}>
+                        <span>{{ label }}</span>
+                    </label>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+             {% if form.thu.errors %}
+                    <div class="form-error">{{ form.thu.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+                {% if form.thu.errors %}
+                    <div class="form-error">{{ form.thu.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-row two-col">
+                <div class="form-group">
+                    <label>Giờ bắt đầu <span>*</span></label>
+                    {{ form.gio_bat_dau }}
+                    {% if form.gio_bat_dau.errors %}
+                        <div class="form-error">{{ form.gio_bat_dau.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>Giờ kết thúc <span>*</span></label>
+                    {{ form.gio_ket_thuc }}
+                    {% if form.gio_ket_thuc.errors %}
+                        <div class="form-error">{{ form.gio_ket_thuc.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row two-col">
+                <div class="form-group">
+                    <label>Phòng <span>*</span></label>
+                    {{ form.phong }}
+                    {% if form.phong.errors %}
+                        <div class="form-error">{{ form.phong.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label>HLV <span>*</span></label>
+                    {{ form.hlv_phu_trach }}
+                    {% if form.hlv_phu_trach.errors %}
+                        <div class="form-error">{{ form.hlv_phu_trach.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Số chỗ tối đa <span>*</span></label>
+                {{ form.so_cho_toi_da }}
+                {% if form.so_cho_toi_da.errors %}
+                    <div class="form-error">{{ form.so_cho_toi_da.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="form-error" style="margin-top: 8px;">
+                    {{ form.non_field_errors.0 }}
+                </div>
+            {% endif %}
+
+            <div class="lich-card-footer">
+                <a href="{% url 'lich_tap:danh_sach_lich_hoc' %}" class="btn-cancel">Hủy</a>
+                <button type="submit" class="btn-save">Lưu</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

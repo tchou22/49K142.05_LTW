@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Xem chương trình quảng cáo{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/quang_cao.css' %}">
+{% endblock %}
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-box">
+        <h2>Xem chương trình quảng cáo</h2>
+
+        <div class="form-group">
+            <label>Tên chương trình</label>
+            <input type="text" class="form-control" value="{{ quang_cao.ten_chuong_trinh }}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Nội dung</label>
+            <textarea class="form-control" rows="5" readonly>{{ quang_cao.noi_dung }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Loại chương trình</label>
+                <input type="text" class="form-control" value="{% if quang_cao.la_voucher %}Voucher / Mã ưu đãi{% else %}Quảng cáo thông thường{% endif %}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Trạng thái gửi</label>
+                <input type="text" class="form-control" value="{% if quang_cao.da_gui %}Đã gửi{% else %}Chưa gửi{% endif %}" readonly>
+            </div>
+        </div>
+
+        {% if quang_cao.la_voucher %}
+        <div class="form-row">
+            <div class="form-group">
+                <label>Mã ưu đãi</label>
+                <input type="text" class="form-control" value="{{ quang_cao.ma_uu_dai|default:'-' }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Giá trị giảm</label>
+                <input type="text" class="form-control" value="{{ quang_cao.gia_tri_giam|floatformat:0 }} đ" readonly>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Ngày bắt đầu</label>
+                <input type="text" class="form-control" value="{{ quang_cao.ngay_bat_dau|date:'d/m/Y' }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày kết thúc</label>
+                <input type="text" class="form-control" value="{{ quang_cao.ngay_ket_thuc|date:'d/m/Y' }}" readonly>
+            </div>
+        </div>
+
+        <div class="form-actions" style="justify-content: center;">
+            <a href="{% url 'cham_soc_khach_hang:danh_sach_quang_cao' %}" class="btn btn-warning">Quay lại</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

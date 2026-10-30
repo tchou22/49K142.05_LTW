@@ -1,0 +1,226 @@
+.consult-page {
+    padding: 24px 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f3f3f3;
+    color: #222;
+}
+
+.alert-success {
+    max-width: 960px;
+    margin: 0 auto 16px;
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.consult-card {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 16px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.consult-left {
+    background: #f6ebc9;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    min-height: 430px;
+}
+
+.consult-brand {
+    color: #f0b323;
+    font-weight: 800;
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+.consult-left h2 {
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 800;
+    color: #1f1f1f;
+    margin-bottom: 20px;
+}
+
+.consult-left p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.consult-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.consult-benefits li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #444;
+}
+
+.consult-benefits li::before {
+    content: "●";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #4ade80;
+    font-size: 12px;
+}
+
+.consult-hotline {
+    margin-top: auto;
+    font-size: 13px;
+    color: #d39b00;
+}
+
+.consult-hotline strong {
+    color: #333;
+}
+
+.consult-right {
+    padding: 28px 24px;
+    background: #fff;
+}
+
+.consult-right h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.consult-right > p {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.consult-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.form-group label span {
+    color: #ef4444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    background: #fff;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #f4c232;
+    box-shadow: 0 0 0 3px rgba(244, 194, 50, 0.15);
+}
+
+.form-error {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #dc2626;
+}
+
+.consult-btn {
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    background: #f4c232;
+    color: #111;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.consult-btn:hover {
+    background: #efbe29;
+}
+
+@media (max-width: 900px) {
+    .consult-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Đồng bộ kích thước form theo giao diện hiện đại */
+.consult-form input,
+.consult-form select,
+.consult-form textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid #d9dde3;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.consult-form textarea {
+    min-height: 112px;
+    resize: vertical;
+}
+
+.consult-btn {
+    min-height: 44px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.form-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc2626;
+}

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Quản lý phản hồi / khiếu nại{% endblock %}
+{% block page_title %}QUẢN LÝ PHẢN HỒI / KHIẾU NẠI{% endblock %}
+
+{% block content %}
+<div style="padding: 24px;">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div style="background: #fff; border-radius: 14px; padding: 20px; border: 1px solid #eee;">
+            <div style="font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600;">TỔNG SỐ</div>
+            <div style="font-size: 28px; font-weight: 700; color: #1f2937;">{{ tong_tat_ca }}</div>
+        </div>
+
+        <div style="background: #fff; border-radius: 14px; padding: 20px; border: 1px solid #eee;">
+            <div style="font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600;">MỚI TIẾP NHẬN</div>
+            <div style="font-size: 28px; font-weight: 700; color: #f59e0b;">{{ tong_moi_tiep_nhan }}</div>
+        </div>
+
+        <div style="background: #fff; border-radius: 14px; padding: 20px; border: 1px solid #eee;">
+            <div style="font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600;">ĐANG TRAO ĐỔI</div>
+            <div style="font-size: 28px; font-weight: 700; color: #2563eb;">{{ tong_dang_trao_doi }}</div>
+        </div>
+
+        <div style="background: #fff; border-radius: 14px; padding: 20px; border: 1px solid #eee;">
+            <div style="font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600;">THÀNH CÔNG</div>
+            <div style="font-size: 28px; font-weight: 700; color: #16a34a;">{{ tong_da_xu_ly }}</div>
+        </div>
+    </div>
+
+    <div style="background: #fff; border-radius: 14px; padding: 16px; border: 1px solid #eee; margin-bottom: 24px;">
+        <form method="get" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <input type="text"
+                   name="q"
+                   value="{{ q }}"
+                   placeholder="Tìm theo tên hội viên, SĐT, nội dung..."
+                   style="flex: 1; min-width: 260px; padding: 12px 14px; border: 1px solid #ddd; border-radius: 10px;">
+
+            <select name="chu_de"
+                    style="min-width: 220px; padding: 12px 14px; border: 1px solid #ddd; border-radius: 10px;">
+                <option value="">Tất cả chủ đề</option>
+                {% for value, label in chu_de_choices %}
+                    <option value="{{ value }}" {% if chu_de == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="trang_thai"
+                    style="min-width: 200px; padding: 12px 14px; border: 1px solid #ddd; border-radius: 10px;">
+                <option value="">Tất cả trạng thái</option>
+                <option value="moi_tiep_nhan" {% if trang_thai == 'moi_tiep_nhan' %}selected{% endif %}>Mới tiếp nhận</option>
+                <option value="dang_trao_doi" {% if trang_thai == 'dang_trao_doi' %}selected{% endif %}>Đang trao đổi</option>
+                <option value="da_xu_ly" {% if trang_thai == 'da_xu_ly' %}selected{% endif %}>Thành công</option>
+                <option value="da_dong" {% if trang_thai == 'da_dong' %}selected{% endif %}>Đã đóng</option>
+            </select>
+
+            <button type="submit"
+                    style="background:#f4c430; color:#222; border:none; padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer;">
+                Tìm kiếm
+            </button>
+        </form>
+    </div>
+
+    <div style="background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #eee;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; min-width: 1200px;">
+                <thead style="background: #fafafa;">
+                    <tr>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">HỘI VIÊN</th>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">CHỦ ĐỀ</th>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">NỘI DUNG KHÁCH</th>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">PHẢN HỒI NHÂN VIÊN</th>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">NGÀY GỬI</th>
+                        <th style="padding: 12px 14px; text-align: left; font-size: 12px;">TRẠNG THÁI</th>
+                        <th style="padding: 12px 14px; text-align: center; font-size: 12px;">HÀNH ĐỘNG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ds_phan_hoi %}
+                    <tr style="border-top: 1px solid #f1f1f1; vertical-align: top;">
+                        <td style="padding: 12px 14px;">
+                            <div style="font-weight: 700; font-size: 13px; color: #222;">{{ item.hoi_vien.ho_ten }}</div>
+                            <div style="font-size: 12px; color: #777;">{{ item.hoi_vien.so_dien_thoai }}</div>
+                        </td>
+
+                        <td style="padding: 12px 14px; font-size: 13px;">
+                            {% if item.chu_de == 'chat_luong_dich_vu' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:600;">
+                                    {{ item.get_chu_de_display }}
+                                </span>
+                            {% elif item.chu_de == 'thai_do_nhan_vien' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#ede9fe; color:#6d28d9; font-size:11px; font-weight:600;">
+                                    {{ item.get_chu_de_display }}
+                                </span>
+                            {% elif item.chu_de == 'co_so_vat_chat' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#dcfce7; color:#15803d; font-size:11px; font-weight:600;">
+                                    {{ item.get_chu_de_display }}
+                                </span>
+                            {% else %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#fef3c7; color:#b45309; font-size:11px; font-weight:600;">
+                                    {{ item.get_chu_de_display }}
+                                </span>
+                                {% if item.mo_ta_van_de_khac %}
+                                    <div style="margin-top:6px; font-size:12px; color:#666;">
+                                        {{ item.mo_ta_van_de_khac }}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 12px 14px; font-size: 13px; color: #444; max-width: 280px; line-height: 1.5; word-wrap: break-word;">
+                            {{ item.noi_dung_khach|truncatechars:100 }}
+                        </td>
+
+                        <td style="padding: 12px 14px; font-size: 13px; color: #444; max-width: 280px; line-height: 1.5; word-wrap: break-word;">
+                            {{ item.tra_loi_nhan_vien|default:"Chưa phản hồi"|truncatechars:100 }}
+                        </td>
+
+                        <td style="padding: 12px 14px; color: #666; font-size: 12px;">
+                            {{ item.ngay_gui|date:"d/m/Y" }}<br>
+                            {{ item.ngay_gui|time:"H:i" }}
+                        </td>
+
+                        <td style="padding: 12px 14px;">
+                            {% if item.trang_thai == 'moi_tiep_nhan' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#ffedd5; color:#f97316; font-size:11px; font-weight:600;">
+                                    Mới tiếp nhận
+                                </span>
+                            {% elif item.trang_thai == 'dang_trao_doi' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#dbeafe; color:#2563eb; font-size:11px; font-weight:600;">
+                                    Đang trao đổi
+                                </span>
+                            {% elif item.trang_thai == 'da_xu_ly' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#dcfce7; color:#16a34a; font-size:11px; font-weight:600;">
+                                    Thành công
+                                </span>
+                            {% elif item.trang_thai == 'da_dong' %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#f3f4f6; color:#6b7280; font-size:11px; font-weight:600;">
+                                    Đã đóng
+                                </span>
+                            {% else %}
+                                <span style="display:inline-block; padding:5px 10px; border-radius:999px; background:#f3f4f6; color:#6b7280; font-size:11px; font-weight:600;">
+                                    {{ item.get_trang_thai_display }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 12px 14px; text-align: center;">
+                            {% if item.trang_thai == 'da_xu_ly' or item.trang_thai == 'da_dong' %}
+                                <a href="{% url 'cham_soc_khach_hang:cap_nhat_phan_hoi_khieu_nai' item.id %}"
+                                   title="Xem chi tiết"
+                                   style="display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:10px; background:#e0f2fe; color:#0369a1; border:1px solid #38bdf8; text-decoration:none; font-size:16px;">
+                                    👁
+                                </a>
+                            {% else %}
+                                <a href="{% url 'cham_soc_khach_hang:cap_nhat_phan_hoi_khieu_nai' item.id %}"
+                                   style="display:inline-block; background:#fff7d6; color:#c58b00; border:1px solid #f4c430; padding:8px 14px; border-radius:8px; text-decoration:none; font-size:12px; font-weight:600;">
+                                    Xử lý
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="padding: 20px; text-align: center; color: #888; font-size: 13px;">
+                            Chưa có phản hồi / khiếu nại nào.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

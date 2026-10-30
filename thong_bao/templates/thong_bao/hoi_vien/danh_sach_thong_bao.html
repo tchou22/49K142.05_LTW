@@ -1,0 +1,57 @@
+{% extends 'base_customer.html' %}
+{% load humanize %}
+
+{% block title %}Thông báo{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Thông báo</h2>
+        <div style="display:flex; gap:10px;">
+            <a href="{% url 'thong_bao:danh_sach_thong_bao' %}?loc=tat_ca"
+               style="padding:8px 14px; border-radius:20px; text-decoration:none;
+               {% if loc_hien_tai == 'tat_ca' %}background:#f4c542; color:#000;{% else %}background:#eee; color:#333;{% endif %}">
+                Tất cả
+            </a>
+            <a href="{% url 'thong_bao:danh_sach_thong_bao' %}?loc=chua_doc"
+               style="padding:8px 14px; border-radius:20px; text-decoration:none;
+               {% if loc_hien_tai == 'chua_doc' %}background:#f4c542; color:#000;{% else %}background:#eee; color:#333;{% endif %}">
+                Chưa đọc
+            </a>
+        </div>
+    </div>
+
+    {% if ds_thong_bao %}
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            {% for tb in ds_thong_bao %}
+                <a href="{% url 'thong_bao:mo_thong_bao' tb.id %}"
+                   style="text-decoration:none; color:inherit; display:block;">
+                    <div class="item-thong-bao"
+                         style="background:#fff; border-radius:14px; padding:16px; box-shadow:0 2px 8px rgba(0,0,0,0.08); position:relative; transition:0.2s;">
+
+                        {% if not tb.da_doc %}
+                            <span style="width:10px; height:10px; border-radius:50%; background:#f4b400; display:inline-block; position:absolute; right:16px; top:20px;"></span>
+                        {% endif %}
+
+                        {% if tb.tieu_de %}
+                            <h4 style="margin:0 0 8px 0; color:#111827;">{{ tb.tieu_de }}</h4>
+                        {% endif %}
+
+                        <p style="margin:0 0 8px 0; color:#444; line-height:1.5;">
+                            {{ tb.noi_dung }}
+                        </p>
+
+                        <small style="color:#888;">
+                            {{ tb.thoi_gian_gui|naturaltime }}
+                        </small>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="background:#fff; padding:24px; border-radius:14px;">
+            Không có thông báo
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
